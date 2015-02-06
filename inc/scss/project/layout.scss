@@ -1,3 +1,7 @@
 .row {
     @include row();
 }
+
+.contain {
+    @include outer-container;
+}

@@ -14,7 +14,7 @@ and [Codekit](https://incident57.com/codekit) to compile it all.
 
 Copy it into your project then…
 
-* Put all the files from [Bitters github](https://github.com/thoughtbot/bitters/tree/master/app/assets/stylesheets) into `inc/framework`.
+* Put all the files **other than `_base.scss`** from [Bitters](https://github.com/thoughtbot/bitters/tree/master/app/assets/stylesheets) into `inc/framework`.
 * Delete the `.gitignore` file out of `inc/framework`.
 * Copy the files from `inc/overrides/` into `inc/framework` and overwrite the default.
 * Delete `overrides` folder.

@@ -46,7 +46,7 @@ compiles to… (note min-width only media queries)
 Apply between two specific points.
 
 ```
-@include media($m-max) {
+@include media($s-m) {
     margin: 20px; }
 ```
 

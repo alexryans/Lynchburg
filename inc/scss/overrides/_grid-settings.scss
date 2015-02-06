@@ -19,7 +19,8 @@ $l-up: new-breakpoint(min-width $l 12);
 // Grid Breakpoints ////////////////////////////////////////////////////////////
 $s-max: new-breakpoint(max-width $s 12);
 $m-max: new-breakpoint(min-width $s max-width $m 12);
-$l-max: new-breakpoint(min-width $m 12);
+$l-max: new-breakpoint(min-width $m max-width $l 12);
+$max: new-breakpoint(min-width $l 12);
 
 // Examples ////////////////////////////////////////////////////////////////////
 %grid-example {
@@ -27,14 +28,16 @@ $l-max: new-breakpoint(min-width $m 12);
         @include span-columns(6);
         @include omega(2n);
     }
-
     @include media($m-max) {
         @include span-columns(3);
         @include omega(4n);
     }
-
     @include media($l-max) {
         @include span-columns(2);
         @include omega(6n);
+    }
+    @include media($max) {
+        @include span-columns(1);
+        @include omega(12n);
     }
 }

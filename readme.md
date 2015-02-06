@@ -31,8 +31,7 @@ Apply from 0 and up and overwrite the previous.
 
 ```
 @include media($m-up) {
-    padding: 10px;
-}
+    padding: 10px; }
 ```
 
 compiles to… (note min-width only media queries)
@@ -48,8 +47,7 @@ Apply between two specific points.
 
 ```
 @include media($m-max) {
-    margin: 20px;
-}
+    margin: 20px; }
 ```
 
 compiles to… (note between min-width and max-width media queries)

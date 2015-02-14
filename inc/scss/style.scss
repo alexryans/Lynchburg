@@ -1,5 +1,6 @@
 @import "bourbon"; // codekit
 @import "neat/neat-helpers"; // CodeKit
+@import "framework/grid-settings";
 @import "framework/variables";
 @import "neat";  // CodeKit
 
@@ -10,7 +11,6 @@
 @import "framework/buttons";
 @import "framework/tables";
 @import "framework/lists";
-@import "framework/grid-settings";
 
 // Project /////////////////////////////////////////////////////////////////////
 @import "project/layout";

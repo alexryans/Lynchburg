@@ -26,7 +26,7 @@ Get building…
 
 There are two types of breakpoints…
 
-### Style breakpoints
+### Inifinite Breakpoints
 
 Apply from 0 and up and overwrite the previous.
 
@@ -42,7 +42,7 @@ compiles to… (note min-width only media queries)
   padding: 10px; }
 ```
 
-### Grid breakpoints
+### Specific Breakpoints
 
 Apply between two specific points.
 
@@ -58,4 +58,24 @@ compiles to… (note between min-width and max-width media queries)
   margin: 20px; }
 ```
 
+### Grid Examples
+
+This grid example shows the use of _Specific_ and _Infinite_ breakpoints. Between size `0` to `$s` (`$z-s`) there are 2 columns (each using 6 of total 12 grid columns). At size `$s` to `$m` it breaks into 4 columns (each using 3 of 12), and finally from `$m` upwards it splits to 6 columns (each using 2 of 12).
+
+```
+.grid-example {
+    @include media($z-s) {
+        @include span-columns(6);
+        @include omega(2n);
+    }
+    @include media($s-m) {
+        @include span-columns(3);
+        @include omega(4n);
+    }
+    @include media($m-up) {
+        @include span-columns(2);
+        @include omega(6n);
+    }
+}
+```
 

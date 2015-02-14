@@ -14,11 +14,26 @@ and [Codekit](https://incident57.com/codekit) to compile it all.
 
 Copy it into your project then…
 
-* Put all the files **other than** `_base.scss` from [Bitters](https://github.com/thoughtbot/bitters/tree/master/app/assets/stylesheets) into `inc/framework`.
-* Delete the `.gitignore` file out of `inc/framework`.
-* Copy the files from `inc/overrides` into `inc/framework` and overwrite the default.
-* Delete `inc/overrides` folder.
-* Copy [Normalize](https://github.com/necolas/normalize.css/blob/master/normalize.css) into `inc/framework` as `normalize.scss`.
+Open Terminal and `cd` into your web folder that contains the Lynchburg `inc` folder.
+
+Run the setup.sh script with `sh setup.sh`.
+
+__Warning__: Do not run on your [Lynchburg](https://github.com/LabelMedia/Lynchburg) clone as it will delete all your version control! This is designed to be run within your working website projects.
+
+Running setup will:
+
+* Clone [Bitters](https://github.com/thoughtbot/bitters).
+* Copy the Bitters stylesheets into `inc/scss/framework/`
+* Delete Bitters `_base.scss` and `_grid-settings.scss` files.
+* Copy our `_grid-settings.scss` into `inc/scss/framework/`
+* Delete the Bitters clone.
+* Delete our `overrides` folder.
+* Clone [Normalize](https://github.com/necolas/normalize.css)
+* Copy and rename `normalize.css` to `inc/scss/framework/_normalize.scss`
+* Delete normalize clone.
+* Delete `.git` folder.
+* Delete `inc/scss/framework/.gitignore`
+* Delete the `setup.sh` file.
 
 Get building…
 
@@ -68,12 +83,12 @@ This grid example shows the use of _Specific_ and _Infinite_ breakpoints. Betwee
         @include span-columns(6);
         @include omega(2n);
     }
-    
+
     @include media($s-m) {
         @include span-columns(3);
         @include omega(4n);
     }
-    
+
     @include media($m-up) {
         @include span-columns(2);
         @include omega(6n);
@@ -81,3 +96,5 @@ This grid example shows the use of _Specific_ and _Infinite_ breakpoints. Betwee
 }
 ```
 
+#### Footnote
+If you are dorky enough to run `setup.sh` on your Lynchburg maintenance project you'll lose everything that has not been pushed to github. You'll have to do a new git clone and make any changes and start again.

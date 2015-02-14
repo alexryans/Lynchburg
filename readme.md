@@ -68,10 +68,12 @@ This grid example shows the use of _Specific_ and _Infinite_ breakpoints. Betwee
         @include span-columns(6);
         @include omega(2n);
     }
+    
     @include media($s-m) {
         @include span-columns(3);
         @include omega(4n);
     }
+    
     @include media($m-up) {
         @include span-columns(2);
         @include omega(6n);

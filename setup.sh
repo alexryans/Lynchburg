@@ -9,6 +9,7 @@ mv bitters/app/assets/stylesheets/* inc/scss/framework/
 echo "// Delete unused Bitters stylesheets…"
 rm inc/scss/framework/_base.scss
 rm inc/scss/framework/_grid-settings.scss
+echo "// Move overrides files…"
 mv inc/scss/overrides/_grid-settings.scss inc/scss/framework/_grid-settings.scss
 echo "// Delete Bitters clone…"
 rm -rf bitters
@@ -33,5 +34,5 @@ echo "// Delete this setup file…"
 rm setup.sh
 
 echo "//////////////////////////////////////////////////////////////////////////"
-echo "// Go fort and build something amazing (mobile first!)"
+echo "// Go forth and build something amazing (mobile first!)"
 echo "//////////////////////////////////////////////////////////////////////////"

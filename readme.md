@@ -58,7 +58,7 @@ compiles to… (note between min-width and max-width media queries)
   margin: 20px; }
 ```
 
-### Grid Examples
+### Grid Example
 
 This grid example shows the use of _Specific_ and _Infinite_ breakpoints. Between size `0` to `$s` (`$z-s`) there are 2 columns (each using 6 of total 12 grid columns). At size `$s` to `$m` it breaks into 4 columns (each using 3 of 12), and finally from `$m` upwards it splits to 6 columns (each using 2 of 12).
 

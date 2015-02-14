@@ -1,3 +1,6 @@
+//$visual-grid: true;
+//$visual-grid-color: ;
+
 // Neat Overrides
 // $column: 90px;
 // $gutter: 30px;
@@ -12,32 +15,12 @@ $l: em(1025);
 $max-width: em(1200);
 
 // Inifinite Breakpoint ////////////////////////////////////////////////////////
-$s-up: new-breakpoint(min-width $s 12);
-$m-up: new-breakpoint(min-width $m 12);
-$l-up: new-breakpoint(min-width $l 12);
+$s-up: new-breakpoint(min-width $s);
+$m-up: new-breakpoint(min-width $m);
+$l-up: new-breakpoint(min-width $l);
 
 // Specific Breakpoints ////////////////////////////////////////////////////////
-$z-s: new-breakpoint(max-width $s 12);
-$s-m: new-breakpoint(min-width $s max-width $m 12);
-$m-l: new-breakpoint(min-width $m max-width $l 12);
-$max: new-breakpoint(min-width $l 12);
-
-// Examples ////////////////////////////////////////////////////////////////////
-%grid-example {
-    @include media($z-s) {
-        @include span-columns(6);
-        @include omega(2n);
-    }
-    @include media($s-m) {
-        @include span-columns(3);
-        @include omega(4n);
-    }
-    @include media($m-l) {
-        @include span-columns(2);
-        @include omega(6n);
-    }
-    @include media($max) {
-        @include span-columns(1);
-        @include omega(12n);
-    }
-}
+$z-s: new-breakpoint(max-width $s);
+$s-m: new-breakpoint(min-width $s max-width $m);
+$m-l: new-breakpoint(min-width $m max-width $l);
+$max: new-breakpoint(min-width $l);

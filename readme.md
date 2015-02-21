@@ -26,7 +26,7 @@ Get building…
 
 There are two types of breakpoints…
 
-### Inifinite Breakpoints
+### Infinite Breakpoints
 
 Apply from 0 and up and overwrite the previous.
 

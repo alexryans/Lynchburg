@@ -14,7 +14,7 @@ $l: em(1025);
 
 $max-width: em(1200);
 
-// Inifinite Breakpoint ////////////////////////////////////////////////////////
+// Infinite Breakpoint ////////////////////////////////////////////////////////
 $s-up: new-breakpoint(min-width $s);
 $m-up: new-breakpoint(min-width $m);
 $l-up: new-breakpoint(min-width $l);

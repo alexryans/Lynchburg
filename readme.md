@@ -4,7 +4,7 @@ The front end starting point for our projects. It’s not a framework, it’s a 
 
 It uses all the stuff by [Thoughtbot]() because they are awesome.
 
-* [Bourbon](http://bitters.bourbon.io/)
+* [Bourbon](http://bourbon.io/)
 * [Neat](http://neat.bourbon.io/)
 * [Bitters](http://bitters.bourbon.io/)
 

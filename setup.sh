@@ -42,7 +42,7 @@ echo "// Cleanup ///////////////////////////////////////////"
 echo "// Deleting .git folder…"
 rm -rf .git
 echo "// Deleting .gitkeep out of framework folder…"
-rm .gitkeep
+rm inc/scss/framework/.gitkeep
 echo "// Deleting this setup file…"
 rm setup.sh
 

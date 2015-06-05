@@ -12,11 +12,5 @@ Icon
 .Spotlight-V100
 .Trashes
 
-# Vagrant
-.vagrant
-
-# Composer stuff
-vendor/
-
 # Codekit
 .sass-cache

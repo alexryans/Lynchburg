@@ -1,7 +1,13 @@
-.row {
+.o-row {
     @include row();
 }
 
-.contain {
+.o-contain {
     @include outer-container;
+
+    &.o-contain--padded {
+        @include media($z-max) {
+            padding: 0 1em;
+        }
+    }
 }

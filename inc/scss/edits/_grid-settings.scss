@@ -21,6 +21,7 @@ $l-up: new-breakpoint(min-width $l);
 
 // Specific Breakpoints ////////////////////////////////////////////////////////
 $z-s: new-breakpoint(max-width $s);
+$z-max: new-breakpoint(max-width $max-width);
 $z-m: new-breakpoint(max-width $m);
 $s-m: new-breakpoint(min-width $s max-width $m);
 $m-l: new-breakpoint(min-width $m max-width $l);

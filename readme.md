@@ -10,6 +10,8 @@ It uses all the stuff by [Thoughtbot]() because they are awesome.
 
 and [Codekit](https://incident57.com/codekit) to compile it all.
 
+*N.B.* If you'd like, you can also couple this with our [Gulp](http://github.com/LabelMedia/gulp) repo, which will handle compilation and minification, as well as a lot of other cool stuff, rather than using Codekit.
+
 ## What do I do with this then?
 
 Copy it into your project then…

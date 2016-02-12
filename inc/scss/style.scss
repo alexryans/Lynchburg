@@ -1,17 +1,17 @@
-@import "bourbon"; // codekit
-@import "neat/neat-helpers"; // CodeKit
-@import "framework/grid-settings";
-@import "framework/variables";
-@import "neat";  // CodeKit
+@import './bower_components/bourbon/app/assets/stylesheets/bourbon';
+@import './bower_components/neat/app/assets/stylesheets/neat-helpers';
+@import 'framework/grid-settings';
+@import 'framework/variables';
+@import './bower_components/neat/app/assets/stylesheets/neat';
 
 // Framework ///////////////////////////////////////////////////////////////////
-@import "framework/normalize";
-@import "framework/typography";
-@import "framework/forms";
-@import "framework/buttons";
-@import "framework/tables";
-@import "framework/lists";
+@import 'framework/normalize';
+@import 'framework/typography';
+@import 'framework/forms';
+@import 'framework/buttons';
+@import 'framework/tables';
+@import 'framework/lists';
 
-// Project /////////////////////////////////////////////////////////////////////
-@import "project/layout";
-@import "project/modules";
+// Objects /////////////////////////////////////////////////////////////////////
+@import 'objects/contain';
+@import 'objects/row';

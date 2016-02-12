@@ -5,7 +5,6 @@
 // $column: 90px;
 // $gutter: 30px;
 // $grid-columns: 12;
-// $max-width: em(1088);
 
 // Neat Breakpoints
 $s: em(321);
@@ -21,7 +20,9 @@ $l-up: new-breakpoint(min-width $l);
 
 // Specific Breakpoints ////////////////////////////////////////////////////////
 $z-s: new-breakpoint(max-width $s);
-$z-max: new-breakpoint(max-width $max-width);
 $z-m: new-breakpoint(max-width $m);
+$z-max: new-breakpoint(max-width $max-width);
+
 $s-m: new-breakpoint(min-width $s max-width $m);
+
 $m-l: new-breakpoint(min-width $m max-width $l);

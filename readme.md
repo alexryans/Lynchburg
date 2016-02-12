@@ -1,16 +1,12 @@
 # Lynchburg
 
-The front end starting point for our projects. It’s not a framework, it’s a starting point.
+The front-end starting point for our projects. It’s not a framework, it’s a starting point.
 
 It uses all the stuff by [Thoughtbot]() because they are awesome.
 
 * [Bourbon](http://bourbon.io/)
 * [Neat](http://neat.bourbon.io/)
 * [Bitters](http://bitters.bourbon.io/)
-
-and [Codekit](https://incident57.com/codekit) to compile it all.
-
-*N.B.* If you'd like, you can also couple this with our [Gulp](http://github.com/LabelMedia/gulp) repo, which will handle compilation and minification, as well as a lot of other cool stuff, rather than using Codekit.
 
 ## What do I do with this then?
 
@@ -97,6 +93,63 @@ This grid example shows the use of _Specific_ and _Infinite_ breakpoints. Betwee
     }
 }
 ```
+
+## Gulp
+
+This is our default, in-house Gulp configuration for projects.
+
+### What's occurin'?
+This system is essentially an automated build tool which takes
+care of the following tasks:
+
+#### Bower
+- Checks and prunes installed Bower components and flushes out
+ any which are no longer in use.
+- Installs any new Bower dependencies added to the `bower.json`
+ file since the `gulp` task was last run.
+
+#### Compilation
+- Compiles and minifies Sass to CSS and moves the compiled file to `./public/inc/css`.
+- Lints Sass for formatting.
+- Lints JS for formatting.
+- Concatonates and minifies JS files into one `app.min.js` file.
+- Compresses raw images and moves them to `./public/inc/img`.
+- Moves fonts to `./public/inc/fonts`.
+
+The build sequence also 'watches' the source files for Sass, JS, font and image files, rerunning the appropriate tasks whenever a change is made to one of the watched files/folders.
+
+### What do I do with this?
+It's simple! All you have to is make sure you have `node`, 
+`npm` and `gulp` installed, then it's as simple as running `npm install` 
+and `gulp`.
+
+`npm install` will look at all the dependencies required by 
+the project and install them to `./node_modules`, and 
+running `gulp` for the first time will install any Bower 
+dependencies required by the project, putting them into 
+`./bower_components`.
+
+The full initial install and configuration is as follows, 
+using [Homebrew](http://brew.sh/) to install some system 
+dependencies:
+- `brew install node`
+- `npm install gulp -g`
+- `npm install`
+- `gulp`
+
+#### Important!
+You'll also have to make sure you have Ruby and scss-lint installed in order for the `styles:lint` task to run successfully:
+- `brew install ruby`
+- `gem install scss_lint`
+
+Finally, you'll need to make sure you have the `.scss-lint.yml` config file in your project. The file itself begins with a `.`, so it'll be hidden in your file structure unless you can see hidden files in your file explorer window.
+
+### Input and output
+You can define your source and compilation locations in `gulpfile.js`, in the main config block - just look for the `resources` and `output` arrays.
+
+### Helpful resources
+- [scss-lint documentation](https://github.com/brigade/scss-lint)
+- [scss-lint config documentation](https://github.com/brigade/scss-lint/tree/master/lib/scss_lint/linter)
 
 #### Footnote
 If you are dorky enough to run `setup.sh` on your Lynchburg maintenance project you'll lose everything that has not been pushed to github. You'll have to do a new git clone and make any changes and start again.

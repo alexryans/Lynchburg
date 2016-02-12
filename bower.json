@@ -1,0 +1,18 @@
+{
+  "name": "Gulp",
+  "authors": [
+    "Alex Ryans <alex@labelmedia.co.uk>",
+    "Tom de Bruin <tom.debruin@labelmedia.co.uk>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ],
+  "devDependencies": {
+    "bourbon": "~4.2.2",
+    "neat": "~1.7.1"
+  }
+}

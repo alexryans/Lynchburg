@@ -16,7 +16,7 @@ echo "// Bitters //////////////////////////////////////////"
 echo "// Cloning Bitters…"
 git clone "git@github.com:thoughtbot/bitters.git"
 echo "// Moving Bitters stylesheets…"
-mv bitters/app/assets/stylesheets/* inc/scss/framework/
+mv bitters/core/* inc/scss/framework/
 echo "// Deleting unused Bitters stylesheets…"
 rm inc/scss/framework/_base.scss
 rm inc/scss/framework/_grid-settings.scss

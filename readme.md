@@ -1,6 +1,6 @@
 # Lynchburg
 
-The front-end starting point for our projects. It’s not a framework, it’s a starting point.
+"It’s not a framework, it’s a starting point."
 
 It uses all the stuff by [Thoughtbot]() because they are awesome.
 

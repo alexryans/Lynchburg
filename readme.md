@@ -8,11 +8,11 @@ It uses all the stuff by [Thoughtbot]() because they are awesome.
 * [Neat](http://neat.bourbon.io/)
 * [Bitters](http://bitters.bourbon.io/)
 
-## What do I do with this then?
+## What do I do with this?
 
 Copy it into your project then…
 
-Open Terminal and `cd` into your web folder that contains the Lynchburg `inc` folder.
+Open Terminal and `cd` into your web folder that contains the Lynchburg.
 
 Run the setup.sh script with `sh setup.sh`.
 
@@ -23,17 +23,15 @@ Running setup will:
 * Clone [Bitters](https://github.com/thoughtbot/bitters).
 * Copy the Bitters stylesheets into `inc/scss/framework/`
 * Delete Bitters `_base.scss` and `_grid-settings.scss` files.
-* Copy our `_grid-settings.scss` into `inc/scss/framework/`
+* Copy Lynchburg's `_grid-settings.scss` into `inc/scss/framework/`
 * Delete the Bitters clone.
-* Delete our `overrides` folder.
+* Delete Lynchburg's `overrides` folder.
 * Clone [Normalize](https://github.com/necolas/normalize.css)
 * Copy and rename `normalize.css` to `inc/scss/framework/_normalize.scss`
 * Delete normalize clone.
 * Delete `.git` folder.
 * Delete `inc/scss/framework/.gitignore`
 * Delete the `setup.sh` file.
-
-Get building…
 
 ## Remember
 
@@ -45,14 +43,16 @@ Apply from 0 and up and overwrite the previous.
 
 ```
 @include media($m-up) {
-    padding: 10px; }
+    padding: 10px; 
+}
 ```
 
 compiles to… (note min-width only media queries)
 
 ```
 @media screen and (min-width: 20.0625em) {
-  padding: 10px; }
+  padding: 10px; 
+}
 ```
 
 ### Specific Breakpoints
@@ -61,14 +61,16 @@ Apply between two specific points.
 
 ```
 @include media($s-m) {
-    margin: 20px; }
+    margin: 20px; 
+}
 ```
 
 compiles to… (note between min-width and max-width media queries)
 
 ```
 @media screen and (min-width: 20.0625em) and (max-width: 48.0625em) {
-  margin: 20px; }
+  margin: 20px; 
+}
 ```
 
 ### Grid Example
@@ -109,16 +111,17 @@ care of the following tasks:
 #### Compilation
 - Compiles and minifies Sass to CSS and moves the compiled file to `./public/inc/css`.
 - Lints Sass for formatting.
-- Lints JS for formatting.
+- Lints JS for formatting (in the release build process only).
 - Concatonates and minifies JS files into one `app.min.js` file.
-- Compresses raw images and moves them to `./public/inc/img`.
+- Moves images to `./public/inc/img`, compresses images in the release build process.
 - Moves fonts to `./public/inc/fonts`.
+- Uses [BrowserSync](https://www.browsersync.io) to create a local server.
 
 The build sequence also 'watches' the source files for Sass, JS, font and image files, rerunning the appropriate tasks whenever a change is made to one of the watched files/folders.
 
 ### What do I do with this?
 It's simple! All you have to is make sure you have `node`, 
-`npm` and `gulp` installed, then it's as simple as running `npm install` 
+`npm` and `gulp` installed, then it's as easy as running `npm install` 
 and `gulp`.
 
 `npm install` will look at all the dependencies required by 
@@ -150,4 +153,4 @@ You can define your source and compilation locations in `gulpfile.js`, in the ma
 - [scss-lint config documentation](https://github.com/brigade/scss-lint/tree/master/lib/scss_lint/linter)
 
 #### Footnote
-If you are dorky enough to run `setup.sh` on your Lynchburg maintenance project you'll lose everything that has not been pushed to github. You'll have to do a new git clone and make any changes and start again.
+If you are dorky enough to run `setup.sh` on your Lynchburg maintenance project you'll lose everything that has not been pushed to github. You'll have to do a new `git clone` and start again.

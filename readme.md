@@ -96,8 +96,6 @@ This grid example shows the use of _Specific_ and _Infinite_ breakpoints. Betwee
 
 ## Gulp
 
-This is our default, in-house Gulp configuration for projects.
-
 ### What's occurin'?
 This system is essentially an automated build tool which takes
 care of the following tasks:

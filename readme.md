@@ -16,7 +16,7 @@ Open Terminal and `cd` into your web folder that contains the Lynchburg.
 
 Run the setup.sh script with `sh setup.sh`.
 
-__Warning__: Do not run on your [Lynchburg](https://github.com/LabelMedia/Lynchburg) clone as it will delete all your version control! This is designed to be run within your working website projects.
+__Warning__: Do not run on your Lynchburg clone as it will delete all your version control! This is designed to be run within your working website projects.
 
 Running setup will:
 

@@ -1,5 +1,8 @@
 {
-    "author": "Alex Ryans, alex@alexryans.co.uk",
+    "authors": [
+        "Alex Ryans <alex@alexryans.co.uk>",
+        "Tom de Bruin <tom@deadlyhifi.co.uk>"
+    ],
     "organisation": "",
     "name": "Lynchburg",
     "description": "",

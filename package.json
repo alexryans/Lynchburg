@@ -3,11 +3,10 @@
         "Alex Ryans <alex@alexryans.co.uk>",
         "Tom de Bruin <tom@deadlyhifi.co.uk>"
     ],
-    "organisation": "",
     "name": "Lynchburg",
-    "description": "",
-    "copyright": "Alex Ryans 2016",
-    "homepage": "",
+    "description": "Lynchburg is a lightweight front-end starting point and uses thoughtbot's Bourbon, Neat and Bitters.",
+    "copyright": "Alexander Ryans 2016",
+    "license": "MIT",
     "repository": {
         "type": "git",
         "url": "https://github.com/alexryans/Lynchburg.git"

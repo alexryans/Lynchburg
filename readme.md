@@ -2,7 +2,7 @@
 
 "It’s not a framework, it’s a starting point."
 
-It uses all the stuff by [Thoughtbot]() because they are awesome.
+It uses all the stuff by [Thoughtbot](https://thoughtbot.com) because they are awesome.
 
 * [Bourbon](http://bourbon.io/)
 * [Neat](http://neat.bourbon.io/)

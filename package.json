@@ -1,13 +1,13 @@
 {
-    "author": "Alex Ryans, alex@labelmedia.co.uk",
-    "organisation": "Label Media",
-    "name": "Gulp",
+    "author": "Alex Ryans, alex@alexryans.co.uk",
+    "organisation": "",
+    "name": "Lynchburg",
     "description": "",
-    "copyright": "Label Media 2015",
-    "homepage": "http://www.labelmedia.co.uk",
+    "copyright": "Alex Ryans 2016",
+    "homepage": "",
     "repository": {
         "type": "git",
-        "url": "https://github.com/LabelMedia/gulp.git"
+        "url": "https://github.com/alexryans/Lynchburg.git"
     },
     "dependencies": {
         "gulp-concat": "^2.4.1",

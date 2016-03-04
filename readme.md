@@ -152,5 +152,6 @@ You can define your source and compilation locations in `gulpfile.js`, in the ma
 - [scss-lint documentation](https://github.com/brigade/scss-lint)
 - [scss-lint config documentation](https://github.com/brigade/scss-lint/tree/master/lib/scss_lint/linter)
 
-#### Footnote
-If you are dorky enough to run `setup.sh` on your Lynchburg maintenance project you'll lose everything that has not been pushed to github. You'll have to do a new `git clone` and start again.
+## Notes
+- For now, we're pulling down Bitters v1.2.0, as the latest version (v1.3.0) includes some updates specifically for Bourbon v5, which is still a pre-release.
+- If you are dorky enough to run `setup.sh` on your Lynchburg maintenance project you'll lose everything that has not been pushed to github. You'll have to do a new `git clone` and start again.

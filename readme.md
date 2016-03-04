@@ -1,5 +1,7 @@
 # Lynchburg
 
+![Lynchburg logo](/lynchburg-hero.jpg)
+
 "It’s not a framework, it’s a starting point."
 
 It uses all the stuff by [Thoughtbot](https://thoughtbot.com) because they are awesome.

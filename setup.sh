@@ -15,8 +15,11 @@ echo ""
 echo "// Bitters //////////////////////////////////////////"
 echo "// Cloning Bitters…"
 git clone "git@github.com:thoughtbot/bitters.git"
+cd bitters
+git checkout tags/v1.2.0
+cd ../
 echo "// Moving Bitters stylesheets…"
-mv bitters/core/* inc/scss/framework/
+mv bitters/app/assets/stylesheets/* inc/scss/framework/
 echo "// Deleting unused Bitters stylesheets…"
 rm inc/scss/framework/_base.scss
 rm inc/scss/framework/_grid-settings.scss

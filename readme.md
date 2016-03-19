@@ -10,7 +10,7 @@ It uses all the stuff by [Thoughtbot](https://thoughtbot.com) because they are a
 * [Neat](http://neat.bourbon.io/)
 * [Bitters](http://bitters.bourbon.io/)
 
-## What do I do with this?
+## Installation
 
 Copy it into your project then…
 
@@ -45,7 +45,7 @@ Apply from 0 and up and overwrite the previous.
 
 ```
 @include media($m-up) {
-    padding: 10px; 
+    padding: 10px;
 }
 ```
 
@@ -53,7 +53,7 @@ compiles to… (note min-width only media queries)
 
 ```
 @media screen and (min-width: 20.0625em) {
-  padding: 10px; 
+  padding: 10px;
 }
 ```
 
@@ -63,7 +63,7 @@ Apply between two specific points.
 
 ```
 @include media($s-m) {
-    margin: 20px; 
+    margin: 20px;
 }
 ```
 
@@ -71,7 +71,7 @@ compiles to… (note between min-width and max-width media queries)
 
 ```
 @media screen and (min-width: 20.0625em) and (max-width: 48.0625em) {
-  margin: 20px; 
+  margin: 20px;
 }
 ```
 
@@ -121,19 +121,19 @@ care of the following tasks:
 
 The build sequence also 'watches' the source files for Sass, JS, font and image files, rerunning the appropriate tasks whenever a change is made to one of the watched files/folders.
 
-### What do I do with this?
-It's simple! All you have to is make sure you have `node`, 
-`npm` and `gulp` installed, then it's as easy as running `npm install` 
+### Installation
+It's simple! All you have to is make sure you have `node`,
+`npm` and `gulp` installed, then it's as easy as running `npm install`
 and `gulp`.
 
-`npm install` will look at all the dependencies required by 
-the project and install them to `./node_modules`, and 
-running `gulp` for the first time will install any Bower 
-dependencies required by the project, putting them into 
+`npm install` will look at all the dependencies required by
+the project and install them to `./node_modules`, and
+running `gulp` for the first time will install any Bower
+dependencies required by the project, putting them into
 `./bower_components`.
 
-The full initial install and configuration is as follows, 
-using [Homebrew](http://brew.sh/) to install some system 
+The full initial install and configuration is as follows,
+using [Homebrew](http://brew.sh/) to install some system
 dependencies:
 - `brew install node`
 - `npm install gulp -g`

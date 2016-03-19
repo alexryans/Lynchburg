@@ -11,7 +11,7 @@
     "bower_components"
   ],
   "devDependencies": {
-    "bourbon": "~4.2.2",
-    "neat": "~1.7.1"
+    "bourbon": "~4.2.6",
+    "neat": "~1.7.4"
   }
 }

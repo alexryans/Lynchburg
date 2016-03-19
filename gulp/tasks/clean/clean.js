@@ -3,7 +3,7 @@ module.exports = function(gulp, config, plugins) {
 
     var del = require('del');
 
-    return function(callback) {
-        del([config.output.base], callback);
+    return function() {
+        del([config.output.base]);
     };
 };

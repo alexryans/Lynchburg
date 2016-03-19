@@ -1,15 +1,25 @@
 module.exports = function(gulp, config, plugins) {
     'use strict';
 
-     var errorHandler = require('../../helpers/error-handler')(plugins);
+    var babelify = require('babelify'),
+        browserify = require('browserify'),
+        buffer = require('vinyl-buffer'),
+        errorHandler = require('../../helpers/error-handler')(plugins),
+        props = {
+            entries: [config.resources.scriptsMain],
+            debug: true,
+            transform: [babelify.configure({ presets : ["es2015"] })],
+            outputName: 'app.min.js'
+        },
+        source = require('vinyl-source-stream');
 
     return function() {
-        return gulp.src(config.resources.scripts)
+        browserify(props).bundle()
+            .on('error', errorHandler())
             .pipe(plugins.plumber(config.options.plumber))
-            //.pipe(plugins.expectFile(config.resources.scripts))
-            //.pipe(gulp.dest('public/js'))
-            .pipe(plugins.sourcemaps.init())
-            .pipe(plugins.concat('app.min.js'))
+            .pipe(source('app.min.js'))
+            .pipe(buffer())
+            .pipe(plugins.sourcemaps.init({loadMaps: true}))
             .pipe(plugins.uglify())
                 .on('error', errorHandler())
             .pipe(plugins.sourcemaps.write())

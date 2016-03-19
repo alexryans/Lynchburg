@@ -15,6 +15,7 @@ module.exports = function(gulp, config, plugins) {
 
     return function() {
         browserify(props).bundle()
+            .on('error', errorHandler())
             .pipe(plugins.plumber(config.options.plumber))
             .pipe(source('app.min.js'))
             .pipe(buffer())

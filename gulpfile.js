@@ -32,7 +32,6 @@ var config = {
             open: false,
             proxy: 'gulp.app'
         },
-        cmq: {},
         imagemin: {
             optimizationLevel: 3,
             progressive: true,

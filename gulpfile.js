@@ -16,7 +16,7 @@ var config = {
         images: './inc/img/**/*.{png,jpg,jpeg,gif,svg}',
         scripts: ['./inc/js/**/*.js', '!./inc/js/app.js'],
         scriptsMain: './inc/js/app.js',
-        styles: './inc/scss/*.scss',
+        styles: './inc/scss/**/*.scss',
         views: './public/*.{html,php}'
     },
     output: {

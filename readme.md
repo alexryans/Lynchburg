@@ -22,7 +22,6 @@
 - `npm install`.
   - This will install all the project dependencies from npm.
 - Run `gulp`.
-  - In addition to running all the stuff noted below, the `gulp` process will download Bourbon and Neat from Bower.
 
 ### Warning
 __Warning__: Do not run on your Lynchburg clone as it will delete all your version control! This is designed to be run within your working website projects.

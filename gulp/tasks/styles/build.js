@@ -10,7 +10,6 @@ module.exports = function(gulp, config, plugins) {
             .pipe(plugins.sourcemaps.init())
             .pipe(plugins.sass(config.options.scss))
                 .on('error', errorHandler())
-            .pipe(gulp.dest(config.output.styles))
             .pipe(plugins.cssnano())
             .pipe(plugins.rename(config.options.rename))
             .pipe(plugins.sourcemaps.write())

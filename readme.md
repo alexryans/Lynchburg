@@ -27,12 +27,30 @@
 ### Warning
 __Warning__: Do not run on your Lynchburg clone as it will delete all your version control! This is designed to be run within your working website projects.
 
-#### Important!
+### Important!
 You'll also have to make sure you have Ruby and scss-lint installed in order for the `styles:lint` Gulp task to run successfully:
 - `brew install ruby`
 - `gem install scss_lint`
 
 Finally, you'll need to make sure you have the `.scss-lint.yml` config file in your project. The file itself begins with a `.`, so it'll be hidden in your file structure unless you can see hidden files in your file explorer window.
+
+### Prerequisites
+- Node/npm
+  - `brew install node`
+- Gulp
+  - `npm install gulp`
+- Ruby/scss-lint gem
+
+#### Ruby/scss-lint
+You have to make sure you have Ruby and scss-lint installed in order for the `styles:lint` Gulp task to run successfully:
+- `brew install ruby`
+- `gem install scss_lint`
+
+Finally, you'll need to make sure you have the `.scss-lint.yml` config file in your project. The file itself begins with a `.`, so it'll be hidden in your file structure unless you can see hidden files in your file explorer window.
+
+## Configuration
+### I/O
+You can define your source and compilation locations in `gulpfile.js`, in the main config block - just look for the `resources` and `output` arrays.
 
 ## Breakpoints in Lynchburg
 There are two types of breakpoints:
@@ -111,22 +129,7 @@ This system is essentially an automated build tool which takes care of the follo
 
 The build sequence also 'watches' the source files for Sass, JS, font and image files, rerunning the appropriate tasks whenever a change is made to one of the watched files/folders.
 
-### Prerequisites
-It's simple! All you have to is make sure you have `node`, `npm` and `gulp` installed, then it's as easy as running `npm install` and `gulp`.
-
-`npm install` will look at all the dependencies required by the project and install them to `./node_modules`, and running `gulp` for the first time will install any Bower dependencies required by the project, putting them into `./bower_components`.
-
-The full initial install and configuration is as follows, using [Homebrew](http://brew.sh/) to install some system dependencies:
-- `brew install node`
-- `npm install gulp -g`
-- `npm install`
-- `gulp`
-
-### Configuration
-#### I/O
-You can define your source and compilation locations in `gulpfile.js`, in the main config block - just look for the `resources` and `output` arrays.
-
-### Helpful resources
+## Helpful resources
 - [scss-lint documentation](https://github.com/brigade/scss-lint)
 - [scss-lint config documentation](https://github.com/brigade/scss-lint/tree/master/lib/scss_lint/linter)
 

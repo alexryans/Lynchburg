@@ -27,13 +27,6 @@
 ### Warning
 __Warning__: Do not run on your Lynchburg clone as it will delete all your version control! This is designed to be run within your working website projects.
 
-### Important!
-You'll also have to make sure you have Ruby and scss-lint installed in order for the `styles:lint` Gulp task to run successfully:
-- `brew install ruby`
-- `gem install scss_lint`
-
-Finally, you'll need to make sure you have the `.scss-lint.yml` config file in your project. The file itself begins with a `.`, so it'll be hidden in your file structure unless you can see hidden files in your file explorer window.
-
 ### Prerequisites
 - Node/npm
   - `brew install node`

@@ -28,6 +28,7 @@ __Warning__: Do not run on your Lynchburg clone as it will delete all your versi
 
 ### Prerequisites
 - Node/npm
+  - If you're running OS X, the easiest way to download Node is via [Homebrew](http://brew.sh).
   - `brew install node`
 - Gulp
   - `npm install gulp`

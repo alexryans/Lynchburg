@@ -30,9 +30,8 @@ var config = {
         browsersync: {
             ghostMode: false,
             open: false,
-            proxy: 'gulp.app'
+            proxy: 'lynchburg.app'
         },
-        cmq: {},
         imagemin: {
             optimizationLevel: 3,
             progressive: true,

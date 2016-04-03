@@ -11,8 +11,8 @@ module.exports = function(gulp, config, plugins) {
             'bower:install',
             'fonts',
             'images:move',
-            'scripts',
-            'styles',
+            'scripts:dev',
+            'styles:dev',
             'styles:lint',
             'browser-sync', callback);
     };

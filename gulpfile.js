@@ -99,9 +99,15 @@ gulp.task('images:compress', getTask('images/compress'));
 gulp.task('images:move', getTask('images/move'));
 
 /**
- * Compile scripts.
+ * Compile scripts (development).
  */
-gulp.task('scripts', getTask('scripts/build'));
+gulp.task('scripts:dev', getTask('scripts/build-dev'));
+
+/**
+ * Compile scripts (production).
+ * N.B. No sourcemapping in production
+ */
+gulp.task('scripts:prod', getTask('scripts/build-prod'));
 
 /**
  * Error check scripts using jshint.
@@ -109,9 +115,15 @@ gulp.task('scripts', getTask('scripts/build'));
 gulp.task('scripts:lint', getTask('scripts/lint'));
 
 /**
- * Compile styles.
+ * Compile styles (development).
  */
-gulp.task('styles', getTask('styles/build'));
+gulp.task('styles:dev', getTask('styles/build-dev'));
+
+/**
+ * Compile styles (production).
+ * N.B. No sourcemapping in production
+ */
+gulp.task('styles:prod', getTask('styles/build-prod'));
 
 /**
  * Error check styles using scsslint.
@@ -135,11 +147,15 @@ gulp.task('build:release', getTask('build/release'));
 gulp.task('watch', function() {
     gulp.watch(config.resources.fonts, ['fonts']);
     gulp.watch(config.resources.images, ['images:move']);
-    gulp.watch(config.resources.scripts, ['scripts']);
-    gulp.watch(config.resources.styles, ['styles', 'styles:lint']);
+    gulp.watch(config.resources.scripts, ['scripts:dev']);
+    gulp.watch(config.resources.styles, ['styles:dev', 'styles:lint']);
     gulp.watch(config.resources.views).on('change', reload);
 });
 
 gulp.task('default', function(callback) {
     runSequence('clean', 'build:dev', 'watch', callback);
+});
+
+gulp.task('production', function(callback) {
+    runSequence('clean', 'build:release', callback);
 });

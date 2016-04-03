@@ -14,9 +14,9 @@ module.exports = function(gulp, config, plugins) {
             'fonts',
             'images:compress',
             'images:move',
-            'scripts',
+            'scripts:prod',
             'scripts:lint',
-            'styles',
+            'styles:prod',
             'styles:lint', callback);
     };
 };

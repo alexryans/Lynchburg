@@ -1,161 +1,140 @@
-// Define our dependencies
-var gulp = require('gulp'),
-    jpegtran = require('imagemin-jpegtran'),
-    pngcrush = require('imagemin-pngcrush'),
-    pngquant = require('imagemin-pngquant'),
-    svgo = require('imagemin-svgo'),
-    plugins = require('gulp-load-plugins')({ camelize: true })
-    runSequence = require('run-sequence'),
-    browserSync = require('browser-sync'),
-    reload = browserSync.reload;
+var gulp        = require('gulp'),
+    _           = require('lodash'),
+    jpegtran    = require('imagemin-jpegtran'),
+    pngcrush    = require('imagemin-pngcrush'),
+    pngquant    = require('imagemin-pngquant'),
+    svgo        = require('imagemin-svgo'),
+    plugins     = require('gulp-load-plugins')({ camelize: true }),
+    browserSync = require('browser-sync').create('browserSync'),
+    reload      = browserSync.reload;
 
-// Config
-var config = {
-    resources: {
-        fonts: './inc/fonts/**/*.*',
-        images: './inc/img/**/*.{png,jpg,jpeg,gif,svg}',
-        scripts: ['./inc/js/**/*.js', '!./inc/js/app.js'],
-        scriptsMain: './inc/js/app.js',
-        styles: './inc/scss/**/*.scss',
-        views: './public/*.{html,php}'
-    },
-    output: {
-        base: './public/inc',
-        fonts: './public/inc/fonts',
-        images: './public/inc/img',
-        scripts: './public/inc/js',
-        styles: './public/inc/css'
-    },
-    options: {
-        browsersync: {
-            ghostMode: false,
-            open: false,
-            proxy: 'lynchburg.app'
+module.exports = function(projectConfig) {
+    var defaultConfig = {
+        src: {
+            fonts: './inc/fonts/**/*.*',
+            images: './inc/img/**/*.{png,jpg,jpeg,gif,svg,ico,json,xml}',
+            scripts: './inc/js/**/*.js',
+            scriptsDir: './inc/js',
+            scriptsFilename: 'app.js',
+            styles: './inc/scss/**/*.scss',
+            views: './public/**/*.{html,phtml,php}'
         },
-        imagemin: {
-            optimizationLevel: 3,
-            progressive: true,
-            interlaced: true,
-            svgoPlugins: [{removeViewBox: false}],
-            use: [
-                jpegtran(),
-                pngcrush(),
-                pngquant(),
-                svgo()
-            ]
+        dist: {
+            base: './public/inc/',
+            fonts: 'fonts',
+            images: 'img',
+            scripts: 'js',
+            scriptsFilename: 'app.js',
+            styles: 'css'
         },
-        jshint: '',
-        jshint_reporter: 'stylish',
-        plumber: {errorHandler: errorHandler},
-        rename: {suffix: '.min'},
-        scss: {},
-        scsslint: {
-            config: '.scss-lint.yml',
-            maxBuffer: 524288
-        },
-        uglify: {
-            //mangle: true,
+        production: !!plugins.util.env.production,
+        options: {
+            autoprefixer: {
+                browsers: [
+                    'last 2 versions',
+                    'ie >= 9'
+                ]
+            },
+            browsersync: {
+                open: false,
+                notify: false,
+                proxy: ''
+            },
+            imagemin: {
+                optimizationLevel: 3,
+                progressive: true,
+                interlaced: true,
+                svgoPlugins: [{ removeViewBox: false }],
+                use: [
+                    jpegtran(),
+                    pngcrush(),
+                    pngquant(),
+                    svgo()
+                ]
+            },
+            rucksack: {
+                shorthandPosition: false,
+                quantityQueries: false,
+                alias: false,
+                inputPseudo: false,
+                clearFix: false,
+                fontPath: false,
+                easings: false
+            },
+            scss: {
+                includePaths: [
+                    'node_modules/foundation-sites/scss',
+                    'node_modules/motion-ui/src/'
+                ]
+            }
         }
-    }
+    };
+
+    var config = _.merge({}, defaultConfig, projectConfig);
+
+    // Helpers
+    var errorHandler = require('./gulp/helpers/error-handler')(plugins),
+        getTask      = require('./gulp/helpers/get-task')(gulp, config, plugins);
+
+    // Prune bower and install bower components
+    gulp.task('bower:prune', function(callback) {
+        getTask('bower/prune', callback);
+    });
+    gulp.task('bower:install', function(callback) {
+        getTask('bower/install', callback);
+    });
+
+    // Clean the compiled assets directory
+    gulp.task('clean', function(callback) {
+        getTask('clean/clean', callback);
+    });
+
+    // Move fonts
+    gulp.task('fonts', getTask('fonts/fonts'));
+
+    // Compress images using imagemin
+    gulp.task('images:compress', getTask('images/compress'));
+    gulp.task('images:move', getTask('images/move'));
+
+    // Compile scripts
+    gulp.task('scripts', getTask('scripts/build'));
+
+     // Compile styles
+    gulp.task('styles', getTask('styles/build'));
+
+    // Pause styles watcher and order scss files using CSScomb
+    gulp.task('styles:comb', getTask('styles/comb'));
+
+    // Browsersync
+    gulp.task('serve', function() {
+        browserSync.init(config.options.browsersync);
+    });
+    gulp.task('reload', function(callback) {
+        browserSync.reload();
+        callback();
+    });
+
+    gulp.task('build', gulp.series(
+        'clean',
+        'bower:prune',
+        'bower:install',
+        'fonts',
+        'images:move',
+        'images:compress',
+        'scripts',
+        'styles:comb',
+        'styles'
+    ));
+
+    gulp.task('watch', function() {
+        gulp.watch(config.src.fonts, gulp.series('fonts'));
+        gulp.watch(config.src.images, gulp.series('images:move'));
+        gulp.watch(config.src.scripts, gulp.series('scripts', 'reload'));
+        config.styleWatcher = gulp.watch(config.src.styles, gulp.series('styles:comb', 'styles'));
+        gulp.watch(config.src.views, gulp.series('reload'));
+    });
+
+    gulp.task('default', gulp.parallel('build', 'serve', 'watch'));
+
+    return gulp;
 };
-
-// Helpers
-var errorHandler = require('./gulp/helpers/error-handler')(plugins),
-    getTask = require('./gulp/helpers/get-task')(gulp, config, plugins);
-
-/**
- * Check that GIT is installed.
- */
-gulp.task('git:check', getTask('git/check'));
-
-/**
- * Prune bower.
- */
-gulp.task('bower:prune', getTask('bower/prune'));
-
-/**
- * Install Bower components.
- */
-gulp.task('bower:install', getTask('bower/install'));
-
-/**
- * Clean (delete) the compiled assets directory. (/public/inc)
- */
-gulp.task('clean', getTask('clean/clean'));
-
-/**
- * Move fonts
- */
-gulp.task('fonts', getTask('fonts/fonts'));
-
-/**
- * Compress images using imagemin.
- */
-gulp.task('images:compress', getTask('images/compress'));
-
-/**
- * Move images
- */
-gulp.task('images:move', getTask('images/move'));
-
-/**
- * Compile scripts (development).
- */
-gulp.task('scripts:dev', getTask('scripts/build-dev'));
-
-/**
- * Compile scripts (production).
- * N.B. No sourcemapping in production
- */
-gulp.task('scripts:prod', getTask('scripts/build-prod'));
-
-/**
- * Error check scripts using jshint.
- */
-gulp.task('scripts:lint', getTask('scripts/lint'));
-
-/**
- * Compile styles (development).
- */
-gulp.task('styles:dev', getTask('styles/build-dev'));
-
-/**
- * Compile styles (production).
- * N.B. No sourcemapping in production
- */
-gulp.task('styles:prod', getTask('styles/build-prod'));
-
-/**
- * Error check styles using scsslint.
- */
-gulp.task('styles:lint', getTask('styles/lint'));
-
-/*
-  Browser Sync
-*/
-gulp.task('browser-sync', getTask('sync/sync'));
-
-/**
- * Build sequence tasks.
- */
-gulp.task('build:dev', getTask('build/dev'));
-gulp.task('build:release', getTask('build/release'));
-
-/**
- * Gulp tasks.
- */
-gulp.task('watch', function() {
-    gulp.watch(config.resources.fonts, ['fonts']);
-    gulp.watch(config.resources.images, ['images:move']);
-    gulp.watch(config.resources.scripts, ['scripts:dev']);
-    gulp.watch(config.resources.styles, ['styles:dev', 'styles:lint']);
-    gulp.watch(config.resources.views).on('change', reload);
-});
-
-gulp.task('default', function(callback) {
-    runSequence('clean', 'build:dev', 'watch', callback);
-});
-
-gulp.task('production', function(callback) {
-    runSequence('clean', 'build:release', callback);
-});

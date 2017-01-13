@@ -1,17 +1,31 @@
 {
-  "authors": [
-    "Alex Ryans <alex@alexryans.co.uk>",
-    "Tom de Bruin <tom@deadlyhifi.co.uk>"
-  ],
   "name": "lynchburg",
   "version": "2.0.0",
   "description": "Lynchburg is a front-end starting point using Gulp 4, Webpack, Babel, and Browsersync.",
-  "copyright": "Alexander Ryans 2017",
-  "license": "MIT",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/alexryans/Lynchburg.git"
+    "url": "git+https://github.com/alexryans/Lynchburg.git"
   },
+  "author": "Alex Ryans <alex@alexryans.co.uk>",
+  "contributors": [
+    {
+      "name": "Mark Roberts",
+      "email": "m.e.roberts@live.com"
+    },
+    {
+      "name": "Tom de Bruin",
+      "email": "tom@deadlyhifi.co.uk"
+    }
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/alexryans/Lynchburg/issues"
+  },
+  "homepage": "https://github.com/alexryans/Lynchburg#readme",
   "dependencies": {
     "babel-core": "^6.21.0",
     "babel-loader": "^6.2.10",

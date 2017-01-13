@@ -1,9 +1,9 @@
-module.exports = function(gulp, config, plugins) {
+module.exports = function(gulp, config, plugins, callback) {
     'use strict';
 
     var del = require('del');
 
     return function() {
-        del([config.output.base]);
-    };
+        del([config.dist.base]).then(callback());
+    }();
 };

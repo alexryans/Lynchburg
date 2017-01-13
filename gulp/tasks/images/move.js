@@ -1,10 +1,10 @@
 module.exports = function(gulp, config, plugins) {
     'use strict';
 
+    var path = require('path');
+
     return function() {
-        return gulp.src(config.resources.images)
-            .pipe(plugins.plumber(config.options.plumber))
-            .pipe(plugins.plumber.stop())
-            .pipe(gulp.dest(config.output.images));
+        return gulp.src(config.src.images)
+            .pipe(gulp.dest(path.resolve(config.dist.base, config.dist.images)));
     };
 };

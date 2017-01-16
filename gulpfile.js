@@ -149,7 +149,7 @@ module.exports = function(projectConfig) {
     // Compile scripts
     gulp.task('scripts', getTask('scripts/build'));
 
-     // Compile styles
+    // Compile styles
     gulp.task('styles', getTask('styles/build'));
 
     // Pause styles watcher and order scss files using CSScomb

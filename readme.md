@@ -44,66 +44,97 @@ $ gulp build --production
 ## Configuration
 Lynchburg can be configured by passing it a config object that overrides any of the keys in the default config object:
 ```js
-var defaultConfig = {
-        src: {
-            fonts: './inc/fonts/**/*.*',
-            images: './inc/img/**/*.{png,jpg,jpeg,gif,svg,ico,json,xml}',
-            scripts: './inc/js/**/*.js',
-            scriptsDir: './inc/js',
-            scriptsFilename: 'app.js',
-            styles: './inc/scss/**/*.scss',
-            views: './public/**/*.{html,phtml,php}'
+{
+    src: {
+        fonts: 'inc/fonts/**/*.*',
+        images: 'inc/img/**/*.{png,jpg,jpeg,gif,svg,ico,json,xml}',
+        scripts: 'inc/js/**/*.js',
+        scriptsDir: 'inc/js',
+        scriptsFilename: 'app.js',
+        styles: 'inc/scss/**/*.scss',
+        views: 'public/**/*.{html,phtml,php}'
+    },
+    dist: {
+        base: 'public/inc/',
+        fonts: 'fonts',
+        images: 'img',
+        scripts: 'js',
+        scriptsFilename: 'app.js',
+        styles: 'css'
+    }
+    production: !!plugins.util.env.production,
+    options: {
+        autoprefixer: {
+            browsers: [
+                'last 2 versions',
+                'ie >= 9'
+            ]
         },
-        dist: {
-            base: './public/inc/',
-            fonts: 'fonts',
-            images: 'img',
-            scripts: 'js',
-            scriptsFilename: 'app.js',
-            styles: 'css'
+        browsersync: {
+            open: false,
+            notify: false,
+            proxy: ''
         },
-        production: !!plugins.util.env.production,
-        options: {
-            autoprefixer: {
-                browsers: [
-                    'last 2 versions',
-                    'ie >= 9'
-                ]
+        csscomb: path.resolve(__dirname, '.csscomb.json'),
+        imagemin: {
+            optimizationLevel: 3,
+            progressive: true,
+            interlaced: true,
+            svgoPlugins: [{ removeViewBox: false }],
+            use: [
+                jpegtran(),
+                pngcrush(),
+                pngquant(),
+                svgo()
+            ]
+        },
+        rucksack: {
+            shorthandPosition: false,
+            quantityQueries: false,
+            alias: false,
+            inputPseudo: false,
+            clearFix: false,
+            fontPath: false,
+            easings: false
+        },
+        scss: {
+            includePaths: [
+                'node_modules/foundation-sites/scss',
+                'node_modules/motion-ui/src/'
+            ]
+        },
+        webpack: {
+            context: 'inc/js',
+            entry: './app.js',
+            output: {
+                filename: 'app.js',
+                path: path.resolve('public/inc/js'),
+                publicPath: 'inc/js/'
             },
-            browsersync: {
-                open: false,
-                notify: false,
-                proxy: ''
+            module: {
+                rules: [{
+                    test: /\.js$/,
+                    exclude: /(node_modules|bower_components)/,
+                    use: [
+                        {
+                            loader: 'babel-loader',
+                            options: {
+                                presets: ['es2015']
+                            }
+                        }
+                    ]
+                }],
             },
-            imagemin: {
-                optimizationLevel: 3,
-                progressive: true,
-                interlaced: true,
-                svgoPlugins: [{ removeViewBox: false }],
-                use: [
-                    jpegtran(),
-                    pngcrush(),
-                    pngquant(),
-                    svgo()
-                ]
+            externals: {
+                foundation: 'Foundation'
             },
-            rucksack: {
-                shorthandPosition: false,
-                quantityQueries: false,
-                alias: false,
-                inputPseudo: false,
-                clearFix: false,
-                fontPath: false,
-                easings: false
-            },
-            scss: {
-                includePaths: [
-                    'node_modules/foundation-sites/scss',
-                    'node_modules/motion-ui/src/'
-                ]
-            }
+            plugins: production
+                ? [ new webpack.SourceMapDevToolPlugin() ]
+                : [ new webpack.optimize.UglifyJsPlugin({ comments: false }) ]
+            };
         }
-    };
+    }
+}
 ```
 
 ## Features

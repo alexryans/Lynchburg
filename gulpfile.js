@@ -4,30 +4,52 @@ var gulp        = require('gulp'),
     pngcrush    = require('imagemin-pngcrush'),
     pngquant    = require('imagemin-pngquant'),
     svgo        = require('imagemin-svgo'),
+    path        = require('path'),
+    webpack     = require('webpack'),
     plugins     = require('gulp-load-plugins')({ camelize: true }),
     browserSync = require('browser-sync').create('browserSync'),
     reload      = browserSync.reload;
 
+var production = !!plugins.util.env.production;
+
 module.exports = function(projectConfig) {
-    var defaultConfig = {
+    var filePaths = {
         src: {
-            fonts: './inc/fonts/**/*.*',
-            images: './inc/img/**/*.{png,jpg,jpeg,gif,svg,ico,json,xml}',
-            scripts: './inc/js/**/*.js',
-            scriptsDir: './inc/js',
+            fonts: 'inc/fonts/**/*.*',
+            images: 'inc/img/**/*.{png,jpg,jpeg,gif,svg,ico,json,xml}',
+            scripts: 'inc/js/**/*.js',
+            scriptsDir: 'inc/js',
             scriptsFilename: 'app.js',
-            styles: './inc/scss/**/*.scss',
-            views: './public/**/*.{html,phtml,php}'
+            styles: 'inc/scss/**/*.scss',
+            views: 'public/**/*.{html,phtml,php}'
         },
         dist: {
-            base: './public/inc/',
+            base: 'public/inc/',
             fonts: 'fonts',
             images: 'img',
             scripts: 'js',
             scriptsFilename: 'app.js',
             styles: 'css'
-        },
-        production: !!plugins.util.env.production,
+        }
+    };
+
+    _.merge(filePaths, projectConfig);
+
+    var webpackPlugins = {
+        development: [
+            new webpack.SourceMapDevToolPlugin()
+        ],
+        production: [
+            new webpack.optimize.UglifyJsPlugin({
+                comments: false
+            })
+        ]
+    };
+
+    var defaultConfig = {
+        src: filePaths.src,
+        dist: filePaths.dist,
+        production: production,
         options: {
             autoprefixer: {
                 browsers: [
@@ -40,6 +62,7 @@ module.exports = function(projectConfig) {
                 notify: false,
                 proxy: ''
             },
+            csscomb: path.resolve(__dirname, '.csscomb.json'),
             imagemin: {
                 optimizationLevel: 3,
                 progressive: true,
@@ -66,6 +89,33 @@ module.exports = function(projectConfig) {
                     'node_modules/foundation-sites/scss',
                     'node_modules/motion-ui/src/'
                 ]
+            },
+            webpack: {
+                context: path.resolve(filePaths.src.scriptsDir),
+                entry: './' + filePaths.src.scriptsFilename,
+                output: {
+                    filename: filePaths.dist.scriptsFilename,
+                    path: path.resolve(filePaths.dist.base, filePaths.dist.scripts),
+                    publicPath: filePaths.src.scriptsDir + '/'
+                },
+                module: {
+                    rules: [{
+                        test: /\.js$/,
+                        exclude: /(node_modules|bower_components)/,
+                        use: [
+                            {
+                                loader: 'babel-loader',
+                                options: {
+                                    presets: ['es2015']
+                                }
+                            }
+                        ]
+                    }],
+                },
+                externals: {
+                    foundation: 'Foundation'
+                },
+                plugins: production ? webpackPlugins.production : webpackPlugins.development
             }
         }
     };

@@ -7,7 +7,7 @@ module.exports = function(gulp, config, plugins) {
         }
 
         return gulp.src(config.src.styles)
-            .pipe(plugins.csscomb())
+            .pipe(plugins.csscomb(__dirname + '/../../../.csscomb.json'))
             .pipe(gulp.dest('./inc/scss/'))
             .on('end', function() {
                 if(config.styleWatcher) {

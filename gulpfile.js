@@ -171,9 +171,9 @@ module.exports = function(projectConfig) {
         'fonts',
         'images:move',
         'images:compress',
-        'scripts',
         'styles:comb',
-        'styles'
+        'styles',
+        'scripts'
     ));
 
     gulp.task('watch', function() {

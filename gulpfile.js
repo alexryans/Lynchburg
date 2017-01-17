@@ -54,7 +54,7 @@ module.exports = function(projectConfig) {
             autoprefixer: {
                 browsers: [
                     'last 2 versions',
-                    'ie >= 9'
+                    'ie >= 11'
                 ]
             },
             browsersync: {
@@ -101,7 +101,7 @@ module.exports = function(projectConfig) {
                 module: {
                     rules: [{
                         test: /\.js$/,
-                        exclude: /(node_modules|bower_components)/,
+                        exclude: path.resolve(__dirname, '../what-input/dist/what-input.js'),
                         use: [
                             {
                                 loader: 'babel-loader',
@@ -149,7 +149,7 @@ module.exports = function(projectConfig) {
     // Compile scripts
     gulp.task('scripts', getTask('scripts/build'));
 
-     // Compile styles
+    // Compile styles
     gulp.task('styles', getTask('styles/build'));
 
     // Pause styles watcher and order scss files using CSScomb
@@ -171,9 +171,9 @@ module.exports = function(projectConfig) {
         'fonts',
         'images:move',
         'images:compress',
-        'scripts',
         'styles:comb',
-        'styles'
+        'styles',
+        'scripts'
     ));
 
     gulp.task('watch', function() {

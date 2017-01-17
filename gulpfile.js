@@ -101,7 +101,7 @@ module.exports = function(projectConfig) {
                 module: {
                     rules: [{
                         test: /\.js$/,
-                        exclude: /(node_modules|bower_components)/,
+                        exclude: path.resolve(__dirname, '../what-input/dist/what-input.js'),
                         use: [
                             {
                                 loader: 'babel-loader',

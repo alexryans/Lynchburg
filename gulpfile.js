@@ -54,7 +54,7 @@ module.exports = function(projectConfig) {
             autoprefixer: {
                 browsers: [
                     'last 2 versions',
-                    'ie >= 9'
+                    'ie >= 11'
                 ]
             },
             browsersync: {

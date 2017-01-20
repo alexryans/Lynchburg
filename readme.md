@@ -52,6 +52,7 @@ Lynchburg can be configured by passing it a config object that overrides any of 
         scriptsDir: 'inc/js',
         scriptsFilename: 'app.js',
         styles: 'inc/scss/**/*.scss',
+        stylesDir: 'inc/scss',
         views: 'public/**/*.{html,phtml,php}'
     },
     dist: {

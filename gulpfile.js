@@ -21,6 +21,7 @@ module.exports = function(projectConfig) {
             scriptsDir: 'inc/js',
             scriptsFilename: 'app.js',
             styles: 'inc/scss/**/*.scss',
+            stylesDir: 'inc/scss',
             views: 'public/**/*.{html,phtml,php}'
         },
         dist: {

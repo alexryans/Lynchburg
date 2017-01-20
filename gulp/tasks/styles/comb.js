@@ -8,7 +8,7 @@ module.exports = function(gulp, config, plugins) {
 
         return gulp.src(config.src.styles)
             .pipe(plugins.csscomb(config.options.csscomb))
-            .pipe(gulp.dest('./inc/scss/'))
+            .pipe(gulp.dest(config.src.stylesDir))
             .on('end', function() {
                 if(config.styleWatcher) {
                     config.styleWatcher.add(config.src.styles);

@@ -113,9 +113,6 @@ module.exports = function(projectConfig) {
                         ]
                     }],
                 },
-                externals: {
-                    foundation: 'Foundation'
-                },
                 plugins: production ? webpackPlugins.production : webpackPlugins.development
             }
         }

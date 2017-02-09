@@ -1,6 +1,6 @@
 {
   "name": "lynchburg",
-  "version": "2.1.4",
+  "version": "2.1.5",
   "description": "Lynchburg is a front-end starting point using Gulp 4, Webpack, Babel, and Browsersync.",
   "main": "gulpfile.js",
   "scripts": {

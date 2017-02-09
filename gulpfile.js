@@ -141,8 +141,7 @@ module.exports = function(projectConfig) {
     gulp.task('fonts', getTask('fonts/fonts'));
 
     // Compress images using imagemin
-    gulp.task('images:compress', getTask('images/compress'));
-    gulp.task('images:move', getTask('images/move'));
+    gulp.task('images', getTask('images/build'));
 
     // Compile scripts
     gulp.task('scripts', getTask('scripts/build'));
@@ -167,8 +166,7 @@ module.exports = function(projectConfig) {
         'bower:prune',
         'bower:install',
         'fonts',
-        'images:move',
-        'images:compress',
+        'images',
         'styles:comb',
         'styles',
         'scripts'
@@ -176,7 +174,7 @@ module.exports = function(projectConfig) {
 
     gulp.task('watch', function() {
         gulp.watch(config.src.fonts, gulp.series('fonts'));
-        gulp.watch(config.src.images, gulp.series('images:move'));
+        gulp.watch(config.src.images, gulp.series('images'));
         gulp.watch(config.src.scripts, gulp.series('scripts', 'reload'));
         config.styleWatcher = gulp.watch(config.src.styles, gulp.series('styles:comb', 'styles'));
         gulp.watch(config.src.views, gulp.series('reload'));

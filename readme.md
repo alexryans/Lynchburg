@@ -17,18 +17,23 @@ $ npm install lynchburg --save-dev
   - `npm install gulpjs/gulp-cli -g`
 
 ## Basic Usage
-Create a `gulpfile.js` like so:
+Create a `gulpfile.js` with the options you want to override from the default config. If you're using Bedrock for a WordPress site, your config will probably want to look like this:
 ```js
 var config = {
     src: {
-        views: './web/**/*.{html,phtml,php}'
+        views: 'web/app/themes/SITENAME/*.{html,phtml,php}'
     },
     dist: {
-        base: './web/app/themes/metallisation/inc'
+        base: 'web/app/themes/SITENAME/inc'
     },
     options: {
         browsersync: {
-            proxy: 'metallisation.app'
+            proxy: 'SITENAME.app'
+        },
+        webpack: {
+            externals: {
+                jquery: 'jQuery'
+            }
         }
     }
 };
@@ -130,8 +135,14 @@ Lynchburg can be configured by passing it a config object that overrides any of 
                 foundation: 'Foundation'
             },
             plugins: production
-                ? [ new webpack.SourceMapDevToolPlugin() ]
-                : [ new webpack.optimize.UglifyJsPlugin({ comments: false }) ]
+                ? [
+                    new webpack.SourceMapDevToolPlugin()
+                ]
+                : [
+                    new webpack.optimize.UglifyJsPlugin({
+                        comments: false
+                    })
+                ]
             };
         }
     }
@@ -146,12 +157,12 @@ Lynchburg has gulp tasks to take care of the following tasks:
 - Installs any new Bower dependencies added to the `bower.json` file since the `gulp` task was last run.
 
 ### Compilation
-- Uses [BrowserSync](https://www.browsersync.io) to create a local server.
-- Compiles and minifies Sass to CSS and moves the compiled file to `./public/inc/css`.
+- Uses [Browsersync](https://www.browsersync.io) to create a local server.
+- Compiles and minifies Sass to CSS and moves the compiled file to `public/inc/css`.
 - Uses [CSScomb](http://csscomb.com/) to order properties in .scss files according to the .csscomb.json file.
 - Uses [Webpack 2](https://webpack.js.org/) to bundle JS files into one `app.js` files.
-- Moves images to `./public/inc/img`.
+- Moves images to `public/inc/img`.
 - Removes sourcemaps, minifies CSS/JS, and compresses images when given the `--production` flag.
-- Moves fonts to `./public/inc/fonts`.
+- Moves fonts to `public/inc/fonts`.
 
 The build sequence also watches the source files for Sass, JS, font, and image files, rerunning the appropriate tasks whenever a change is made to one of the watched files/folders.

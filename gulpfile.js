@@ -21,6 +21,7 @@ module.exports = function(projectConfig) {
             scriptsDir: 'inc/js',
             scriptsFilename: 'app.js',
             styles: 'inc/scss/**/*.scss',
+            stylesDir: 'inc/scss',
             views: 'public/**/*.{html,phtml,php}'
         },
         dist: {
@@ -111,9 +112,6 @@ module.exports = function(projectConfig) {
                             }
                         ]
                     }],
-                },
-                externals: {
-                    foundation: 'Foundation'
                 },
                 plugins: production ? webpackPlugins.production : webpackPlugins.development
             }

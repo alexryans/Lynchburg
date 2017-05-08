@@ -4,6 +4,6 @@ module.exports = function(gulp, config, plugins, callback) {
     var del = require('del');
 
     return function() {
-        del([config.dist.base]).then(callback());
+        del([config.dist.base+'/**', '!'+config.dist.base, '!'+config.dist.base+'/.gitkeep']).then(callback());
     }();
 };

@@ -77,13 +77,17 @@ module.exports = function(projectConfig) {
                 ]
             },
             rucksack: {
+                responsiveType: false,
                 shorthandPosition: false,
                 quantityQueries: false,
-                alias: false,
                 inputPseudo: false,
                 clearFix: false,
                 fontPath: false,
-                easings: false
+                hexRGBA: false,
+                easings: false,
+                fallbacks: false,
+                autoprefixer: false,
+                reporter: false
             },
             scss: {
                 includePaths: [

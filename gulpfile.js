@@ -77,7 +77,7 @@ module.exports = function(projectConfig) {
                 ]
             },
             rucksack: {
-                responsiveType: false,
+                responsiveType: true,
                 shorthandPosition: false,
                 quantityQueries: false,
                 inputPseudo: false,

@@ -7,6 +7,7 @@ module.exports = function(gulp, config, plugins) {
         }
 
         return gulp.src(config.src.styles)
+            .pipe(plugins.plumber())
             .pipe(plugins.csscomb(config.options.csscomb))
             .pipe(gulp.dest(config.src.stylesDir))
             .on('end', function() {

@@ -1,7 +1,11 @@
-module.exports = function(gulp, config, plugins) {
+module.exports = function(gulp, config, plugins, callback) {
     'use strict';
 
-    return function() {
+    return function(callback) {
+        if(!config.options.csscomb) {
+            return callback();
+        }
+
         if(config.styleWatcher) {
             config.styleWatcher.unwatch(config.src.styles);
         }

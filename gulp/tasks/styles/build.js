@@ -12,8 +12,9 @@ module.exports = function(gulp, config, plugins) {
     return function() {
         return gulp.src(config.src.styles)
             .pipe(config.production ? plugins.util.noop() : plugins.sourcemaps.init())
-            .pipe(plugins.sass(config.options.scss))
-                .on('error', errorHandler())
+            .pipe(plugins.sass(config.options.scss).on('error',
+                config.production ? error => { throw Error(error); } : errorHandler())
+            )
             .pipe(postcss([
                 autoprefixer(config.options.autoprefixer),
                 rucksack(config.options.rucksack),

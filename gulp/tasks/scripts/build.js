@@ -5,12 +5,24 @@ module.exports = function(gulp, config, plugins) {
 
     return function(callback) {
         return webpack(config.options.webpack, function(err, stats) {
+            let error = null;
+
             if(err) {
-                console.log(err);
+                error = err;
             }
             if(stats.compilation.errors.length) {
-                console.log(stats.compilation.errors);
+                error = stats.compilation.errors;
             }
+
+            if(error) {
+                if(config.production) {
+                    throw Error(error);
+                }
+                else {
+                    console.log(error);
+                }
+            }
+
             callback();
         });
     };

@@ -18,7 +18,7 @@ module.exports = function(gulp, config, plugins) {
             .pipe(postcss([
                 autoprefixer(config.options.autoprefixer),
                 rucksack(config.options.rucksack),
-                cssnano
+                cssnano(config.options.cssnano)
             ]))
             .pipe(config.production ? plugins.util.noop() : plugins.sourcemaps.write())
             .pipe(gulp.dest(path.resolve(config.dist.base, config.dist.styles)))

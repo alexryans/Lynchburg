@@ -64,6 +64,9 @@ module.exports = function(projectConfig) {
                 proxy: ''
             },
             csscomb: path.resolve(__dirname, '.csscomb.json'),
+            cssnano: {
+                zindex: false
+            },
             imagemin: {
                 optimizationLevel: 3,
                 progressive: true,

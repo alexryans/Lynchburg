@@ -28,6 +28,25 @@ const defaultConfig = {
         fonts: 'fonts',
         images: 'img',
         styles: 'css'
+    },
+    options: {
+        autoprefixer: {},
+        cssnano: {
+            preset: 'default'
+        },
+        rucksack: {
+            responsiveType: true,
+            shorthandPosition: false,
+            quantityQueries: false,
+            inputPseudo: false,
+            clearFix: false,
+            fontPath: false,
+            hexRGBA: false,
+            easings: false,
+            fallbacks: false,
+            autoprefixer: false,
+            reporter: false
+        },
     }
 };
 
@@ -58,12 +77,12 @@ module.exports = projectConfig => {
     return {
         clean: clean,
         fonts: fonts,
-        images: imageTasks.prod,
-        styles: styleTasks.build,
+        images: imageTasks.dev,
+        styles: styleTasks.dev,
 
         // Production build
-        build: series(clean, fonts, imageTasks.prod, styleTasks.build),
-        dev: series(clean, fonts, imageTasks.dev, styleTasks.build)
+        build: series(clean, fonts, imageTasks.prod, styleTasks.prod),
+        dev: series(clean, fonts, imageTasks.dev, styleTasks.dev)
     }
 };
 

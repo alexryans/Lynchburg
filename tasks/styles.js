@@ -1,17 +1,23 @@
 const autoprefixer = require('autoprefixer');
 const cssnano = require('cssnano');
 const { src, dest } = require('gulp');
+const Fiber = require('fibers');
 const postcss = require('gulp-postcss');
 const rucksack = require('rucksack-css');
 const sass = require('gulp-sass');
 const sourcemaps = require('gulp-sourcemaps');
 
-sass.compiler = require('node-sass');
+sass.compiler = require('sass');
 
 function stylesDev(config) {
     return () => src(config.paths.styles.src)
         .pipe(sourcemaps.init())
-        .pipe(sass().on('error', sass.logError))
+        .pipe(
+            sass({
+                fiber: Fiber,
+                ...config.options.scss
+            }
+        ).on('error', sass.logError))
         .pipe(postcss([
             autoprefixer(config.options.autoprefixer),
             rucksack(config.options.rucksack),
@@ -22,7 +28,7 @@ function stylesDev(config) {
 
 function stylesProd(config) {
     return () => src(config.paths.styles.src)
-        .pipe(sass().on('error', sass.logError))
+        .pipe(sass(config.options.sass).on('error', sass.logError))
         .pipe(postcss([
             autoprefixer(config.options.autoprefixer),
             rucksack(config.options.rucksack),

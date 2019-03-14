@@ -47,6 +47,9 @@ const defaultConfig = {
             autoprefixer: false,
             reporter: false
         },
+        scss: {
+            includePaths: ['node_modules']
+        }
     }
 };
 

@@ -20,11 +20,13 @@ const defaultConfig = {
     src: {
         dir: 'src/',
         fonts: 'fonts/**/*.{woff,woff2,ttf,otf,svg}',
+        images: 'img/**/*.{png,jpg,jpeg,gif,svg,ico,json,xml}',
         styles: 'scss/**/*.scss'
     },
     dist: {
         dir: 'dist/',
         fonts: 'fonts',
+        images: 'img',
         styles: 'css'
     }
 };
@@ -39,7 +41,7 @@ module.exports = projectConfig => {
     // Build list of resolved paths to pass to tasks
     config.paths = {};
 
-    ['fonts', 'styles'].forEach(task => {
+    ['fonts', 'images', 'styles'].forEach(task => {
         config.paths[task] = {
             src: path.resolve(config.src.dir, config.src[task]),
             dist: path.resolve(config.dist.dir, config.dist[task])
@@ -50,14 +52,18 @@ module.exports = projectConfig => {
 
     const clean = require('./tasks/clean.js')(config).clean;
     const fonts = require('./tasks/fonts.js')(config).fonts;
+    const imageTasks = require('./tasks/images.js')(config);
     const styleTasks = require('./tasks/styles.js')(config);
 
     return {
         clean: clean,
         fonts: fonts,
+        images: imageTasks.prod,
         styles: styleTasks.build,
 
-        build: series(clean, fonts, styleTasks.build),
+        // Production build
+        build: series(clean, fonts, imageTasks.prod, styleTasks.build),
+        dev: series(clean, fonts, imageTasks.dev, styleTasks.build)
     }
 };
 

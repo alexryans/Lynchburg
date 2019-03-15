@@ -83,8 +83,8 @@ module.exports = projectConfig => {
 
     // prettyLog(config);
 
-    const clean = require('./tasks/clean.js')(config).clean;
-    const fonts = require('./tasks/fonts.js')(config).fonts;
+    const cleanTask = require('./tasks/clean.js')(config).clean;
+    const fontsTask = require('./tasks/fonts.js')(config).fonts;
     const imageTasks = require('./tasks/images.js')(config);
     const scriptTasks = require('./tasks/scripts.js')(config);
     const styleTasks = require('./tasks/styles.js')(config);
@@ -95,7 +95,7 @@ module.exports = projectConfig => {
     };
 
     const watchTask = cb => {
-        watch(config.paths.fonts.src, fonts);
+        watch(config.paths.fonts.src, fontsTask);
         watch(config.paths.images.src, imageTasks.dev);
         watch(config.paths.scripts.src, series(scriptTasks.dev, browserSyncReloadTask));
         watch(config.paths.styles.src, styleTasks.dev);
@@ -107,15 +107,15 @@ module.exports = projectConfig => {
     }
 
     return {
-        clean: clean,
-        fonts: fonts,
+        clean: cleanTask,
+        fonts: fontsTask,
         images: imageTasks.dev,
         scripts: scriptTasks.dev,
         styles: styleTasks.dev,
         watch: watchTask,
         serve: serveTask,
-        dev: series(clean, parallel(fonts, imageTasks.dev, styleTasks.dev, scriptTasks.dev)),
-        build: series(clean, parallel(fonts, imageTasks.prod, styleTasks.prod, scriptTasks.prod)),
+        dev: series(cleanTask, parallel(fontsTask, imageTasks.dev, styleTasks.dev, scriptTasks.dev)),
+        build: series(cleanTask, parallel(fontsTask, imageTasks.prod, styleTasks.prod, scriptTasks.prod)),
         default: parallel(serveTask, watchTask)
     }
 };

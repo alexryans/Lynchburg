@@ -11,7 +11,7 @@
 //     reload      = browserSync.reload;
 
 const _merge = require('lodash.merge');
-const { series } = require('gulp');
+const { series, parallel } = require('gulp');
 const path = require('path');
 
 // var production = !!plugins.util.env.production;
@@ -90,9 +90,8 @@ module.exports = projectConfig => {
         scripts: scriptTasks.dev,
         styles: styleTasks.dev,
 
-        // Production build
-        build: series(clean, fonts, imageTasks.prod, styleTasks.prod, scriptTasks.prod),
-        dev: series(clean, fonts, imageTasks.dev, styleTasks.dev, scriptTasks.dev)
+        dev: series(clean, parallel(fonts, imageTasks.dev, styleTasks.dev, scriptTasks.dev)),
+        build: series(clean, parallel(fonts, imageTasks.prod, styleTasks.prod, scriptTasks.prod))
     }
 };
 

@@ -1,4 +1,5 @@
 const autoprefixer = require('autoprefixer');
+const browserSync = require('browser-sync').get('browserSync');
 const cssnano = require('cssnano');
 const { src, dest } = require('gulp');
 const Fiber = require('fibers');
@@ -23,7 +24,8 @@ function stylesDev(config) {
             rucksack(config.options.rucksack),
         ]))
         .pipe(sourcemaps.write())
-        .pipe(dest(config.paths.styles.dist));
+        .pipe(dest(config.paths.styles.dist))
+        .pipe(browserSync.stream());
 }
 
 function stylesProd(config) {

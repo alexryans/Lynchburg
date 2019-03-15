@@ -32,7 +32,7 @@
     "babel-loader": "^7.1.2",
     "babel-preset-es2015": "^6.18.0",
     "bower": "^1.3.12",
-    "browser-sync": "^2.16",
+    "browser-sync": "^2.26.3",
     "cssnano": "^4.1.10",
     "del": "^4.0.0",
     "fibers": "^3.1.1",

@@ -10,6 +10,7 @@
 //     browserSync = require('browser-sync').create('browserSync'),
 //     reload      = browserSync.reload;
 
+const browserSync = require('browser-sync').create('browserSync');
 const _merge = require('lodash.merge');
 const { series, parallel, watch } = require('gulp');
 const path = require('path');
@@ -33,6 +34,11 @@ const defaultConfig = {
     },
     options: {
         autoprefixer: {},
+        browsersync: {
+            open: false,
+            notify: false,
+            proxy: ''
+        },
         cssnano: {
             preset: 'default'
         },
@@ -83,20 +89,34 @@ module.exports = projectConfig => {
     const scriptTasks = require('./tasks/scripts.js')(config);
     const styleTasks = require('./tasks/styles.js')(config);
 
+    const browserSyncReloadTask = cb => {
+        browserSync.reload();
+        cb();
+    };
+
+    const watchTask = cb => {
+        watch(config.paths.fonts.src, fonts);
+        watch(config.paths.images.src, imageTasks.dev);
+        watch(config.paths.scripts.src, series(scriptTasks.dev, browserSyncReloadTask));
+        watch(config.paths.styles.src, styleTasks.dev);
+        watch(config.src.views, browserSyncReloadTask);
+    }
+
+    const serveTask = cb => {
+        browserSync.init(config.options.browsersync);
+    }
+
     return {
         clean: clean,
         fonts: fonts,
         images: imageTasks.dev,
         scripts: scriptTasks.dev,
         styles: styleTasks.dev,
-        watch: cb => {
-            watch(config.paths.fonts.src, fonts);
-            watch(config.paths.images.src, imageTasks.dev);
-            watch(config.paths.scripts.src, scriptTasks.dev);
-            watch(config.paths.styles.src, styleTasks.dev);
-        },
+        watch: watchTask,
+        serve: serveTask,
         dev: series(clean, parallel(fonts, imageTasks.dev, styleTasks.dev, scriptTasks.dev)),
-        build: series(clean, parallel(fonts, imageTasks.prod, styleTasks.prod, scriptTasks.prod))
+        build: series(clean, parallel(fonts, imageTasks.prod, styleTasks.prod, scriptTasks.prod)),
+        default: parallel(serveTask, watchTask)
     }
 };
 

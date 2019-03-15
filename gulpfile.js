@@ -39,6 +39,7 @@ const defaultConfig = {
             notify: false,
             proxy: ''
         },
+        csscomb: path.resolve(__dirname, '.csscomb.json'),
         cssnano: {
             preset: 'default'
         },
@@ -112,6 +113,7 @@ module.exports = projectConfig => {
         images: imageTasks.dev,
         scripts: scriptTasks.dev,
         styles: styleTasks.dev,
+        csscomb: styleTasks.csscomb,
         watch: watchTask,
         serve: serveTask,
         dev: series(cleanTask, parallel(fontsTask, imageTasks.dev, styleTasks.dev, scriptTasks.dev)),

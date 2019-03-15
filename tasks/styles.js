@@ -1,8 +1,10 @@
 const autoprefixer = require('autoprefixer');
 const browserSync = require('browser-sync').get('browserSync');
+const Comb = require('csscomb');
 const cssnano = require('cssnano');
 const { src, dest } = require('gulp');
 const Fiber = require('fibers');
+const path = require('path');
 const postcss = require('gulp-postcss');
 const rucksack = require('rucksack-css');
 const sass = require('gulp-sass');
@@ -44,7 +46,17 @@ function stylesProd(config) {
         .pipe(dest(config.paths.styles.dist));
 }
 
+function cssComb(config) {
+    // Get parent folder of src sass glob from config
+    const scssFolder = path.dirname(config.paths.styles.src).substring(0, path.dirname(config.paths.styles.src).indexOf('**'));
+
+    const comb = new Comb(require(config.options.csscomb));
+
+    return cb => comb.processPath(scssFolder);
+}
+
 module.exports = config => ({
     dev: stylesDev(config),
-    prod: stylesProd(config)
+    prod: stylesProd(config),
+    csscomb: cssComb(config)
 });

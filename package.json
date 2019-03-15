@@ -50,6 +50,6 @@
     "rucksack-css": "^1.0.2",
     "sass": "^1.17.2",
     "script-loader": "^0.7.0",
-    "webpack": "^3.5.5"
+    "webpack": "^4.29.6"
   }
 }

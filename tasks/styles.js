@@ -28,7 +28,12 @@ function stylesDev(config) {
 
 function stylesProd(config) {
     return () => src(config.paths.styles.src)
-        .pipe(sass(config.options.sass).on('error', sass.logError))
+        .pipe(
+            sass({
+                fiber: Fiber,
+                ...config.options.scss
+            }
+        ).on('error', sass.logError))
         .pipe(postcss([
             autoprefixer(config.options.autoprefixer),
             rucksack(config.options.rucksack),

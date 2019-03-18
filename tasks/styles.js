@@ -13,21 +13,24 @@ const sourcemaps = require('gulp-sourcemaps');
 sass.compiler = require('sass');
 
 function stylesDev(config) {
-    return () => src(config.paths.styles.src)
-        .pipe(sourcemaps.init())
-        .pipe(
-            sass({
-                fiber: Fiber,
-                ...config.options.scss
-            }
-        ).on('error', sass.logError))
-        .pipe(postcss([
-            autoprefixer(config.options.autoprefixer),
-            rucksack(config.options.rucksack),
-        ]))
-        .pipe(sourcemaps.write())
-        .pipe(dest(config.paths.styles.dist))
-        .pipe(browserSync.stream());
+    return () => {
+        console.log('Sass');
+        return src(config.paths.styles.src)
+            .pipe(sourcemaps.init())
+            .pipe(
+                sass({
+                    fiber: Fiber,
+                    ...config.options.scss
+                }
+            ).on('error', sass.logError))
+            .pipe(postcss([
+                autoprefixer(config.options.autoprefixer),
+                rucksack(config.options.rucksack),
+            ]))
+            .pipe(sourcemaps.write())
+            .pipe(dest(config.paths.styles.dist))
+            .pipe(browserSync.stream());
+    }
 }
 
 function stylesProd(config) {
@@ -47,12 +50,23 @@ function stylesProd(config) {
 }
 
 function cssComb(config) {
-    // Get parent folder of src sass glob from config
-    const scssFolder = path.dirname(config.paths.styles.src).substring(0, path.dirname(config.paths.styles.src).indexOf('**'));
+    // Disable CSScomb when option is false
+    if(!config.options.csscomb) {
+        return cb => {
+            console.log('CSScomb has been disabled in the options.');
+            cb();
+        }
+    }
 
     const comb = new Comb(require(config.options.csscomb));
 
-    return cb => comb.processPath(scssFolder);
+    // Get parent folder of src sass glob from config
+    const scssFolder = path.dirname(config.paths.styles.src).substring(0, path.dirname(config.paths.styles.src).indexOf('**'));
+
+    return () => {
+        console.log('CSScomb');
+        return comb.processPath(scssFolder);
+    }
 }
 
 module.exports = config => ({

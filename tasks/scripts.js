@@ -2,6 +2,8 @@ const glob = require('glob');
 const path = require('path');
 const webpack = require('webpack');
 
+const timer = require('../lib/timer.js');
+
 function defaultWebpackConfig(config) {
     const webpackConfig = {
         entry: {},
@@ -22,31 +24,25 @@ function defaultWebpackConfig(config) {
     return webpackConfig;
 }
 
-const errorHandler = cb => {
-    return (err, stats) => {
-        // console.log(stats.toString({
-        //     colors: true
-        // }));
+const errorHandler = (err, stats) => {
+    // console.log(stats.toString({ colors: true }));
 
-        if(err) {
-            console.error(err.stack || err);
-            if(err.details) {
-                console.error(err.details);
-            }
-            return;
+    if(err) {
+        console.error(err.stack || err);
+        if(err.details) {
+            console.error(err.details);
         }
+        return;
+    }
 
-        const statsJson = stats.toJson();
+    const statsJson = stats.toJson();
 
-        if(stats.hasErrors()) {
-            statsJson.errors.forEach(error => console.error(error));
-        }
+    if(stats.hasErrors()) {
+        statsJson.errors.forEach(error => console.error(error));
+    }
 
-        if(stats.hasWarnings()) {
-            statsJson.warnings.forEach(warning => console.warn(warning));
-        }
-
-        cb();
+    if(stats.hasWarnings()) {
+        statsJson.warnings.forEach(warning => console.warn(warning));
     }
 }
 
@@ -57,7 +53,16 @@ function scriptsDev(config) {
         devtool: 'cheap-eval-source-map'
     };
 
-    return cb => webpack(webpackConfig, errorHandler(cb));
+    return cb => {
+        const start = timer.start('scripts');
+
+        return webpack(webpackConfig, (err, stats) => {
+            errorHandler(err, stats);
+            timer.finish('scripts', start);
+
+            cb();
+        });
+    }
 }
 
 function scriptsProd(config) {
@@ -66,7 +71,11 @@ function scriptsProd(config) {
         mode: 'production'
     };
 
-    return cb => webpack(webpackConfig, errorHandler(cb));
+    return cb => webpack(webpackConfig, (err, stats) => {
+        errorHandler(err, stats);
+
+        cb();
+    });
 }
 
 module.exports = config => ({

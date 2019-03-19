@@ -10,11 +10,14 @@ const rucksack = require('rucksack-css');
 const sass = require('gulp-sass');
 const sourcemaps = require('gulp-sourcemaps');
 
+const timer = require('../lib/timer.js');
+
 sass.compiler = require('sass');
 
 function stylesDev(config) {
     return () => {
-        console.log('Sass');
+        const start = timer.start('styles');
+
         return src(config.paths.styles.src)
             .pipe(sourcemaps.init())
             .pipe(
@@ -29,7 +32,10 @@ function stylesDev(config) {
             ]))
             .pipe(sourcemaps.write())
             .pipe(dest(config.paths.styles.dist))
-            .pipe(browserSync.stream());
+            .pipe(browserSync.stream())
+            .on('end', () => {
+                timer.finish('styles', start);
+            });
     }
 }
 
@@ -64,8 +70,11 @@ function cssComb(config) {
     const scssFolder = path.dirname(config.paths.styles.src).substring(0, path.dirname(config.paths.styles.src).indexOf('**'));
 
     return () => {
-        console.log('CSScomb');
-        return comb.processPath(scssFolder);
+        const start = timer.start('csscomb');
+
+        return comb.processPath(scssFolder).then(() => {
+            timer.finish('csscomb', start);
+        });
     }
 }
 

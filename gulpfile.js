@@ -99,7 +99,7 @@ module.exports = projectConfig => {
         watch(config.paths.fonts.src, fontsTask);
         watch(config.paths.images.src, imageTasks.dev);
         watch(config.paths.scripts.src, series(scriptTasks.dev, browserSyncReloadTask));
-        watch(config.paths.styles.src, styleTasks.dev);
+        watch(config.paths.styles.src, series(styleTasks.csscomb, styleTasks.dev));
         watch(config.src.views, browserSyncReloadTask);
     }
 

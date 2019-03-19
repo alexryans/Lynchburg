@@ -107,6 +107,32 @@ module.exports = projectConfig => {
         browserSync.init(config.options.browsersync);
     }
 
+    const devBuildTask = series(
+        cleanTask,
+        parallel(
+            fontsTask,
+            imageTasks.dev,
+            series(
+                styleTasks.csscomb,
+                styleTasks.dev
+            ),
+            scriptTasks.dev
+        )
+    );
+
+    const prodBuildTask = series(
+        cleanTask,
+        parallel(
+            fontsTask,
+            imageTasks.prod,
+            series(
+                styleTasks.csscomb,
+                styleTasks.prod
+            ),
+            scriptTasks.prod
+        )
+    );
+
     return {
         clean: cleanTask,
         fonts: fontsTask,
@@ -116,9 +142,9 @@ module.exports = projectConfig => {
         csscomb: styleTasks.csscomb,
         watch: watchTask,
         serve: serveTask,
-        dev: series(cleanTask, parallel(fontsTask, imageTasks.dev, styleTasks.dev, scriptTasks.dev)),
-        build: series(cleanTask, parallel(fontsTask, imageTasks.prod, styleTasks.prod, scriptTasks.prod)),
-        default: parallel(serveTask, watchTask)
+        dev: devBuildTask,
+        build: prodBuildTask,
+        default: parallel(devBuildTask, serveTask, watchTask),
     }
 };
 

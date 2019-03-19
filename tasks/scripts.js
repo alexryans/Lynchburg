@@ -1,4 +1,5 @@
 const glob = require('glob');
+const notifier = require('node-notifier');
 const path = require('path');
 const webpack = require('webpack');
 
@@ -52,11 +53,20 @@ const errorHandler = (err, stats) => {
     const statsJson = stats.toJson();
 
     if(stats.hasErrors()) {
-        statsJson.errors.forEach(error => console.error(error));
+        statsJson.errors.forEach(error => {
+            console.error(error);
+
+            notifier.notify({
+                title: 'Error running Gulp',
+                message: error,
+                sound: 'Frog',
+                icon: path.join(__dirname, '../node_modules/gulp-notify/assets/gulp-error.png'),
+            });
+        });
     }
 
     if(stats.hasWarnings()) {
-        statsJson.warnings.forEach(warning => console.warn(warning));
+        statsJson.warnings.forEach(warning => console.error(warning));
     }
 }
 

@@ -2,13 +2,14 @@ const autoprefixer = require('autoprefixer');
 const browserSync = require('browser-sync').get('browserSync');
 const Comb = require('csscomb');
 const cssnano = require('cssnano');
-const { src, dest } = require('gulp');
 const Fiber = require('fibers');
-const path = require('path');
+const { src, dest } = require('gulp');
+const notify = require('gulp-notify');
 const postcss = require('gulp-postcss');
-const rucksack = require('rucksack-css');
 const sass = require('gulp-sass');
 const sourcemaps = require('gulp-sourcemaps');
+const path = require('path');
+const rucksack = require('rucksack-css');
 
 const timer = require('../lib/timer.js');
 
@@ -24,8 +25,9 @@ function stylesDev(config) {
                 sass({
                     fiber: Fiber,
                     ...config.options.scss
-                }
-            ).on('error', sass.logError))
+                })
+                .on('error', notify.onError(error => error.message))
+            )
             .pipe(postcss([
                 autoprefixer(config.options.autoprefixer),
                 rucksack(config.options.rucksack),
@@ -45,8 +47,9 @@ function stylesProd(config) {
             sass({
                 fiber: Fiber,
                 ...config.options.scss
-            }
-        ).on('error', sass.logError))
+            })
+            .on('error', notify.onError(error => error.message))
+        )
         .pipe(postcss([
             autoprefixer(config.options.autoprefixer),
             rucksack(config.options.rucksack),

@@ -3,6 +3,7 @@ const browserSync = require('browser-sync').get('browserSync');
 const Comb = require('csscomb');
 const cssnano = require('cssnano');
 const Fiber = require('fibers');
+const globParent = require('glob-parent');
 const { src, dest } = require('gulp');
 const notify = require('gulp-notify');
 const postcss = require('gulp-postcss');
@@ -69,13 +70,10 @@ function cssComb(config) {
 
     const comb = new Comb(require(config.options.csscomb));
 
-    // Get parent folder of src sass glob from config
-    const scssFolder = path.dirname(config.paths.styles.src).substring(0, path.dirname(config.paths.styles.src).indexOf('**'));
-
     return () => {
         const start = timer.start('csscomb');
 
-        return comb.processPath(scssFolder).then(() => {
+        return comb.processPath(globParent(config.paths.styles.src)).then(() => {
             timer.finish('csscomb', start);
         });
     }

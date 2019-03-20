@@ -1,4 +1,5 @@
 const glob = require('glob');
+const globParent = require('glob-parent');
 const notifier = require('node-notifier');
 const path = require('path');
 const webpack = require('webpack');
@@ -29,8 +30,7 @@ function defaultWebpackConfig(config) {
     }
 
     // Make separate entry point for each file in top level src.scripts folder
-    const entryFolder = path.dirname(config.src.scripts).substring(0, path.dirname(config.src.scripts).indexOf('**'));
-    const entryFiles = path.join(config.src.dir, entryFolder, '/*.js');
+    const entryFiles = path.join(config.src.dir, globParent(config.src.scripts), '/*.js');
 
     glob.sync(entryFiles).forEach(filename => {
         webpackConfig.entry[path.parse(filename).name] = `./${filename}`;

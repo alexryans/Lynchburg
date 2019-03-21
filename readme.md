@@ -4,9 +4,22 @@
 
 > "It’s not a framework, it’s a starting point."
 
+Lynchburg is a collection of [Gulp](https://github.com/gulpjs/gulp) tasks for common frontend development tasks.
+- Compiles and minifies Sass to CSS and includes [Autoprefixer](https://github.com/postcss/autoprefixer) and the responsive typography from [Rucksack](https://github.com/seaneking/rucksack)
+- Formats source sass files using [CSScomb](http://csscomb.com/) according to the `.csscomb.json` configuration file.
+- Bundles JS files using [Webpack](https://webpack.js.org/).
+- Minifies images.
+- Production builds, which removes sourcemaps, minifies output CSS/JS, and compresses images.
+- Watches source files and runs the appropriate tasks when changes are detected.
+- Uses [Browsersync](https://www.browsersync.io) to proxy a local server and update browsers when files are updated.
+
 ## Install
 ```sh
-$ npm install lynchburg --save-dev
+$ npm install lynchburg
+```
+or
+```sh
+$ yarn add lynchburg
 ```
 
 ### Prerequisites
@@ -14,155 +27,40 @@ $ npm install lynchburg --save-dev
   - If you're running macOS, the easiest way to download Node is to first install [Homebrew](http://brew.sh), then run `brew install node`.
   - On Linux, the easiest way is to use [nvm](https://github.com/creationix/nvm).
 - Gulp CLI
-  - `npm install gulpjs/gulp-cli -g`
+  - `npm install -g gulp-cli` or `yarn global add gulp-cli`
 
 ## Basic Usage
 Create a `gulpfile.js` with the options you want to override from the default config. If you're using Bedrock for a WordPress site, your config will probably want to look like this:
 ```js
-var config = {
+const config = {
     src: {
-        views: 'web/app/themes/SITENAME/*.{html,phtml,php}'
+        views: 'web/app/themes/SITE_NAME/**/*.{html,phtml,php,twig}'
     },
     dist: {
-        base: 'web/app/themes/SITENAME/inc'
+        dir: 'web/app/themes/SITE_NAME/dist'
     },
     options: {
         browsersync: {
-            proxy: 'SITENAME.app'
-        },
-        webpack: {
-            externals: {
-                jquery: 'jQuery'
-            }
+            proxy: 'SITE_NAME.local'
         }
     }
 };
 
-require('lynchburg')(config);
+module.exports = require('lynchburg')(config);
 ```
 
-You can now use any of Lynchburg's gulp tasks! Run `gulp` to trigger a build, start Browsersync, and start watching files. Pass the `--production` flag to run in production mode, for example to build production files:
+You can now use any of Lynchburg's gulp tasks! Run `gulp` to run the default task and trigger a build, start Browsersync, and start watching files. Pass the `--production` flag to run in production mode. For example, to do a production build:
 ```sh
 $ gulp build --production
 ```
 
-## Configuration
-Lynchburg can be configured by passing it a config object that overrides any of the keys in the default config object:
-```js
-{
-    src: {
-        fonts: 'inc/fonts/**/*.*',
-        images: 'inc/img/**/*.{png,jpg,jpeg,gif,svg,ico,json,xml}',
-        scripts: 'inc/js/**/*.js',
-        scriptsDir: 'inc/js',
-        scriptsFilename: 'app.js',
-        styles: 'inc/scss/**/*.scss',
-        stylesDir: 'inc/scss',
-        views: 'public/**/*.{html,phtml,php}'
-    },
-    dist: {
-        base: 'public/inc/',
-        fonts: 'fonts',
-        images: 'img',
-        scripts: 'js',
-        scriptsFilename: 'app.js',
-        styles: 'css'
-    }
-    production: !!plugins.util.env.production,
-    options: {
-        autoprefixer: {
-            browsers: [
-                'last 2 versions',
-                'ie >= 9'
-            ]
-        },
-        browsersync: {
-            open: false,
-            notify: false,
-            proxy: ''
-        },
-        csscomb: path.resolve(__dirname, '.csscomb.json'),
-        imagemin: {
-            optimizationLevel: 3,
-            progressive: true,
-            interlaced: true,
-            svgoPlugins: [{ removeViewBox: false }],
-            use: [
-                jpegtran(),
-                pngcrush(),
-                pngquant(),
-                svgo()
-            ]
-        },
-        rucksack: {
-            shorthandPosition: false,
-            quantityQueries: false,
-            alias: false,
-            inputPseudo: false,
-            clearFix: false,
-            fontPath: false,
-            easings: false
-        },
-        scss: {
-            includePaths: [
-                'node_modules/foundation-sites/scss',
-                'node_modules/motion-ui/src/'
-            ]
-        },
-        webpack: {
-            context: 'inc/js',
-            entry: './app.js',
-            output: {
-                filename: 'app.js',
-                path: path.resolve('public/inc/js'),
-                publicPath: 'inc/js/'
-            },
-            module: {
-                rules: [{
-                    test: /\.js$/,
-                    exclude: /(node_modules|bower_components)/,
-                    use: [
-                        {
-                            loader: 'babel-loader',
-                            options: {
-                                presets: ['es2015']
-                            }
-                        }
-                    ]
-                }],
-            },
-            externals: {
-                foundation: 'Foundation'
-            },
-            plugins: production
-                ? [
-                    new webpack.SourceMapDevToolPlugin()
-                ]
-                : [
-                    new webpack.optimize.UglifyJsPlugin({
-                        comments: false
-                    })
-                ]
-            };
-        }
-    }
-}
+You can see all the available tasks and a description of what each one does by running the following command:
+```sh
+$ gulp --tasks
 ```
 
-## Features
-Lynchburg has gulp tasks to take care of the following tasks:
+## Configuration
+Lynchburg can be configured by passing it a config object that overrides any of the keys in the default config object. The passed config will be merged in with the default config, so you needn't redefine any keys you don't need to change.
 
-### Bower
-- Checks and prunes installed Bower components and flushes out any which are no longer in use.
-- Installs any new Bower dependencies added to the `bower.json` file since the `gulp` task was last run.
-
-### Compilation
-- Uses [Browsersync](https://www.browsersync.io) to create a local server.
-- Compiles and minifies Sass to CSS and moves the compiled file to `public/inc/css`.
-- Uses [CSScomb](http://csscomb.com/) to order properties in .scss files according to the .csscomb.json file.
-- Uses [Webpack 2](https://webpack.js.org/) to bundle JS files into one `app.js` files.
-- Moves images to `public/inc/img`.
-- Removes sourcemaps, minifies CSS/JS, and compresses images when given the `--production` flag.
-- Moves fonts to `public/inc/fonts`.
-
-The build sequence also watches the source files for Sass, JS, font, and image files, rerunning the appropriate tasks whenever a change is made to one of the watched files/folders.
+### CSScomb
+CSScomb can be disabled by setting `config.options.csscomb` to false.

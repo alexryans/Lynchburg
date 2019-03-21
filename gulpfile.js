@@ -4,6 +4,7 @@ const { series, parallel, watch } = require('gulp');
 const path = require('path');
 const yargs = require('yargs');
 
+const generateTaskInfo = require('./lib/documentation.js');
 const timer = require('./lib/timer.js');
 
 const defaultConfig = {
@@ -81,38 +82,33 @@ function lynchburg(projectConfig) {
 
     // prettyLog(config);
 
-    const cleanTask = require('./tasks/clean.js')(config);
-    const cssCombTask = require('./tasks/csscomb.js')(config);
-    const fontsTask = require('./tasks/fonts.js')(config);
-    const imagesTask = require('./tasks/images.js')(config);
-    const sassTask = require('./tasks/sass.js')(config);
-    const webpackTask = require('./tasks/webpack.js')(config);
+    const tasks = {};
 
-    cleanTask.displayName = 'clean';
-    cssCombTask.displayName = 'csscomb';
-    fontsTask.displayName = 'fonts';
-    imagesTask.displayName = 'images';
-    sassTask.displayName = 'sass';
-    webpackTask.displayName = 'webpack';
+    tasks.clean = require('./tasks/clean.js')(config);
+    tasks.csscomb = require('./tasks/csscomb.js')(config);
+    tasks.fonts = require('./tasks/fonts.js')(config);
+    tasks.images = require('./tasks/images.js')(config);
+    tasks.sass = require('./tasks/sass.js')(config);
+    tasks.webpack = require('./tasks/webpack.js')(config);
 
     const reloadBrowserSync = cb => {
         browserSync.reload();
         cb();
     };
 
-    const watchTask = cb => {
+    tasks.watch = cb => {
         // Watchers are passed timed tasks to show output when watched task fires
-        watch(config.paths.src.fonts, timer(fontsTask));
-        watch(config.paths.src.images, timer(imagesTask));
-        watch(config.paths.src.js, series(timer(webpackTask), reloadBrowserSync));
+        watch(config.paths.src.fonts, timer(tasks.fonts));
+        watch(config.paths.src.images, timer(tasks.images));
+        watch(config.paths.src.js, series(timer(tasks.webpack), reloadBrowserSync));
         // Sass watcher is paused during CSScomb and Sass to avoid infinite loop
         const sassWatcher = watch(config.paths.src.sass, series(
             cb => {
                 sassWatcher.unwatch(config.paths.src.sass);
                 cb();
             },
-            timer(cssCombTask),
-            timer(sassTask),
+            timer(tasks.csscomb),
+            timer(tasks.sass),
             cb => {
                 sassWatcher.add(config.paths.src.sass);
                 cb();
@@ -121,37 +117,32 @@ function lynchburg(projectConfig) {
         watch(config.src.views, reloadBrowserSync);
     }
 
-    const serveTask = cb => {
+    tasks.serve = cb => {
         browserSync.init(config.options.browsersync);
     }
 
     // Gulp doesn't show output for tasks in series/parallel when exported via Lynchburg, so force output with timer
-    const buildTask = series(
-        timer(cleanTask),
+    tasks.build = series(
+        timer(tasks.clean),
         parallel(
-            timer(fontsTask),
-            timer(imagesTask),
+            timer(tasks.fonts),
+            timer(tasks.images),
             series(
-                timer(cssCombTask),
-                timer(sassTask)
+                timer(tasks.csscomb),
+                timer(tasks.sass)
             ),
-            timer(webpackTask)
+            timer(tasks.webpack)
         )
     );
-    buildTask.displayName = 'build';
 
-    return {
-        clean: cleanTask,
-        csscomb: cssCombTask,
-        fonts: fontsTask,
-        images: imagesTask,
-        sass: sassTask,
-        webpack: webpackTask,
-        watch: watchTask,
-        serve: serveTask,
-        build: buildTask,
-        default: series(timer(buildTask), parallel(serveTask, watchTask))
-    }
+    tasks.default = series(timer(tasks.build), parallel(timer(tasks.serve), timer(tasks.watch)));
+
+    // Generate name and description for each task for `gulp --tasks`
+    Object.keys(tasks).forEach(taskName => {
+        generateTaskInfo(tasks[taskName], taskName);
+    });
+
+    return tasks;
 };
 
 module.exports = lynchburg;

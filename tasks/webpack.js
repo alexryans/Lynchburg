@@ -10,7 +10,7 @@ function defaultWebpackConfig(config) {
     const webpackConfig = {
         entry: {},
         output: {
-            path: path.resolve(config.dist.dir, config.dist.scripts),
+            path: config.paths.dist.js,
             filename: '[name].js'
         },
         module: {
@@ -29,8 +29,8 @@ function defaultWebpackConfig(config) {
         }
     }
 
-    // Make separate entry point for each file in top level src.scripts folder
-    const entryFiles = path.join(config.src.dir, globParent(config.src.scripts), '/*.js');
+    // Make separate entry point for each file in top level src js folder
+    const entryFiles = path.join(config.src.dir, globParent(config.src.js), '/*.js');
 
     glob.sync(entryFiles).forEach(filename => {
         webpackConfig.entry[path.parse(filename).name] = `./${filename}`;
@@ -70,7 +70,7 @@ const errorHandler = (err, stats) => {
     }
 }
 
-function scriptsDev(config) {
+function webpackDev(config) {
     const webpackConfig = {
         ...defaultWebpackConfig(config),
         mode: 'development',
@@ -78,18 +78,18 @@ function scriptsDev(config) {
     };
 
     return cb => {
-        const start = timer.start('scripts');
+        const start = timer.start('webpack');
 
         return webpack(webpackConfig, (err, stats) => {
             errorHandler(err, stats);
-            timer.finish('scripts', start);
+            timer.finish('webpack', start);
 
             cb();
         });
     }
 }
 
-function scriptsProd(config) {
+function webpackProd(config) {
     const webpackConfig = {
         ...defaultWebpackConfig(config),
         mode: 'production'
@@ -103,6 +103,6 @@ function scriptsProd(config) {
 }
 
 module.exports = config => ({
-    dev: scriptsDev(config),
-    prod: scriptsProd(config)
+    dev: webpackDev(config),
+    prod: webpackProd(config)
 });

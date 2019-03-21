@@ -1,31 +1,28 @@
 const autoprefixer = require('autoprefixer');
 const browserSync = require('browser-sync').get('browserSync');
-const Comb = require('csscomb');
 const cssnano = require('cssnano');
 const Fiber = require('fibers');
-const globParent = require('glob-parent');
 const { src, dest } = require('gulp');
 const notify = require('gulp-notify');
 const postcss = require('gulp-postcss');
 const sass = require('gulp-sass');
 const sourcemaps = require('gulp-sourcemaps');
-const path = require('path');
 const rucksack = require('rucksack-css');
 
 const timer = require('../lib/timer.js');
 
 sass.compiler = require('sass');
 
-function stylesDev(config) {
+function sassDev(config) {
     return () => {
-        const start = timer.start('styles');
+        const start = timer.start('sass');
 
-        return src(config.paths.styles.src)
+        return src(config.paths.src.sass)
             .pipe(sourcemaps.init())
             .pipe(
                 sass({
                     fiber: Fiber,
-                    ...config.options.scss
+                    ...config.options.sass
                 })
                 .on('error', notify.onError(error => error.message))
             )
@@ -34,20 +31,20 @@ function stylesDev(config) {
                 rucksack(config.options.rucksack),
             ]))
             .pipe(sourcemaps.write())
-            .pipe(dest(config.paths.styles.dist))
+            .pipe(dest(config.paths.dist.css))
             .pipe(browserSync.stream())
             .on('end', () => {
-                timer.finish('styles', start);
+                timer.finish('sass', start);
             });
     }
 }
 
-function stylesProd(config) {
-    return () => src(config.paths.styles.src)
+function sassProd(config) {
+    return () => src(config.paths.src.sass)
         .pipe(
             sass({
                 fiber: Fiber,
-                ...config.options.scss
+                ...config.options.sass
             })
             .on('error', notify.onError(error => error.message))
         )
@@ -56,31 +53,10 @@ function stylesProd(config) {
             rucksack(config.options.rucksack),
             cssnano(config.options.cssnano)
         ]))
-        .pipe(dest(config.paths.styles.dist));
-}
-
-function cssComb(config) {
-    // Disable CSScomb when option is false
-    if(!config.options.csscomb) {
-        return cb => {
-            console.log('CSScomb has been disabled in the options.');
-            cb();
-        }
-    }
-
-    const comb = new Comb(require(config.options.csscomb));
-
-    return () => {
-        const start = timer.start('csscomb');
-
-        return comb.processPath(globParent(config.paths.styles.src)).then(() => {
-            timer.finish('csscomb', start);
-        });
-    }
+        .pipe(dest(config.paths.dist.css));
 }
 
 module.exports = config => ({
-    dev: stylesDev(config),
-    prod: stylesProd(config),
-    csscomb: cssComb(config)
+    dev: sassDev(config),
+    prod: sassProd(config)
 });

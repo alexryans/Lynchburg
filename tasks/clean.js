@@ -8,6 +8,4 @@ function clean(config) {
     ]);
 }
 
-module.exports = config => ({
-    clean: clean(config)
-});
+module.exports = config => clean(config);

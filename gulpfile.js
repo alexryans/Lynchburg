@@ -8,15 +8,16 @@ const defaultConfig = {
         dir: 'src/',
         fonts: 'fonts/**/*.{woff,woff2,ttf,otf,svg}',
         images: 'img/**/*.{png,jpg,jpeg,gif,svg,ico,json,xml}',
-        scripts: 'js/**/*.js',
-        styles: 'scss/**/*.scss'
+        js: 'js/**/*.js',
+        sass: 'scss/**/*.scss',
+        views: ''
     },
     dist: {
         dir: 'dist/',
         fonts: 'fonts',
         images: 'img',
-        scripts: 'js',
-        styles: 'css'
+        js: 'js',
+        css: 'css'
     },
     options: {
         autoprefixer: {},
@@ -42,7 +43,7 @@ const defaultConfig = {
             autoprefixer: false,
             reporter: false
         },
-        scss: {
+        sass: {
             includePaths: ['node_modules']
         },
         webpack: {
@@ -59,34 +60,40 @@ module.exports = projectConfig => {
     const config = _merge({}, defaultConfig, projectConfig);
 
     // Build list of resolved paths to pass to tasks
-    config.paths = {};
+    config.paths = {
+        src: {},
+        dist: {}
+    };
 
-    ['fonts', 'images', 'scripts', 'styles'].forEach(task => {
-        config.paths[task] = {
-            src: path.resolve(config.src.dir, config.src[task]),
-            dist: path.resolve(config.dist.dir, config.dist[task])
-        }
+    ['src', 'dist'].forEach(group => {
+        Object.keys(config[group]).forEach(dirName => {
+            if(dirName == 'dir' || dirName == 'views') {
+                return;
+            }
+            config.paths[group][dirName] = path.resolve(config[group].dir, config[group][dirName])
+        });
     });
 
-    // prettyLog(config);
+    prettyLog(config);
 
-    const cleanTask = require('./tasks/clean.js')(config).clean;
-    const fontsTask = require('./tasks/fonts.js')(config).fonts;
+    const cleanTask = require('./tasks/clean.js')(config);
+    const cssCombTask = require('./tasks/csscomb.js')(config);
+    const fontsTask = require('./tasks/fonts.js')(config);
     const imageTasks = require('./tasks/images.js')(config);
-    const scriptTasks = require('./tasks/scripts.js')(config);
-    const styleTasks = require('./tasks/styles.js')(config);
+    const sassTasks = require('./tasks/sass.js')(config);
+    const webpackTasks = require('./tasks/webpack.js')(config);
 
-    const browserSyncReloadTask = cb => {
+    const reloadBrowserSync = cb => {
         browserSync.reload();
         cb();
     };
 
     const watchTask = cb => {
-        watch(config.paths.fonts.src, fontsTask);
-        watch(config.paths.images.src, imageTasks.dev);
-        watch(config.paths.scripts.src, series(scriptTasks.dev, browserSyncReloadTask));
-        watch(config.paths.styles.src, series(styleTasks.csscomb, styleTasks.dev));
-        watch(config.src.views, browserSyncReloadTask);
+        watch(config.paths.src.fonts, fontsTask);
+        watch(config.paths.src.images, imageTasks.dev);
+        watch(config.paths.src.js, series(webpackTasks.dev, reloadBrowserSync));
+        watch(config.paths.src.sass, series(cssCombTask, sassTasks.dev));
+        watch(config.src.views, reloadBrowserSync);
     }
 
     const serveTask = cb => {
@@ -99,10 +106,10 @@ module.exports = projectConfig => {
             fontsTask,
             imageTasks.dev,
             series(
-                styleTasks.csscomb,
-                styleTasks.dev
+                cssCombTask,
+                sassTasks.dev
             ),
-            scriptTasks.dev
+            webpackTasks.dev
         )
     );
 
@@ -112,20 +119,20 @@ module.exports = projectConfig => {
             fontsTask,
             imageTasks.prod,
             series(
-                styleTasks.csscomb,
-                styleTasks.prod
+                cssCombTask,
+                sassTasks.prod
             ),
-            scriptTasks.prod
+            webpackTasks.prod
         )
     );
 
     return {
         clean: cleanTask,
+        csscomb: cssCombTask,
         fonts: fontsTask,
         images: imageTasks.dev,
-        scripts: scriptTasks.dev,
-        styles: styleTasks.dev,
-        csscomb: styleTasks.csscomb,
+        sass: sassTasks.dev,
+        webpack: webpackTasks.dev,
         watch: watchTask,
         serve: serveTask,
         dev: devBuildTask,

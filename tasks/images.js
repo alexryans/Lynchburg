@@ -12,7 +12,4 @@ function imagesProd(config) {
         .pipe(dest(config.paths.dist.images));
 }
 
-module.exports = config => ({
-    dev: imagesDev(config),
-    prod: imagesProd(config)
-});
+module.exports = config => config.isProduction ? imagesProd(config) : imagesDev(config);

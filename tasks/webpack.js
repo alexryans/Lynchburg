@@ -102,7 +102,4 @@ function webpackProd(config) {
     });
 }
 
-module.exports = config => ({
-    dev: webpackDev(config),
-    prod: webpackProd(config)
-});
+module.exports = config => config.isProduction ? webpackProd(config) : webpackDev(config);

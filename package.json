@@ -50,6 +50,7 @@
     "pretty-hrtime": "^1.0.3",
     "rucksack-css": "^1.0.2",
     "sass": "^1.17.2",
-    "webpack": "^4.29.6"
+    "webpack": "^4.29.6",
+    "yargs": "^13.2.2"
   }
 }

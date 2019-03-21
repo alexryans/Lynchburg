@@ -2,6 +2,8 @@ const browserSync = require('browser-sync').create('browserSync');
 const _merge = require('lodash.merge');
 const { series, parallel, watch } = require('gulp');
 const path = require('path');
+const yargs = require('yargs');
+
 
 const defaultConfig = {
     src: {
@@ -59,6 +61,8 @@ function prettyLog(json) {
 module.exports = projectConfig => {
     const config = _merge({}, defaultConfig, projectConfig);
 
+    config.isProduction = !!yargs.argv.production;
+
     // Build list of resolved paths to pass to tasks
     config.paths = {
         src: {},
@@ -74,14 +78,14 @@ module.exports = projectConfig => {
         });
     });
 
-    prettyLog(config);
+    // prettyLog(config);
 
     const cleanTask = require('./tasks/clean.js')(config);
     const cssCombTask = require('./tasks/csscomb.js')(config);
     const fontsTask = require('./tasks/fonts.js')(config);
-    const imageTasks = require('./tasks/images.js')(config);
-    const sassTasks = require('./tasks/sass.js')(config);
-    const webpackTasks = require('./tasks/webpack.js')(config);
+    const imagesTask = require('./tasks/images.js')(config);
+    const sassTask = require('./tasks/sass.js')(config);
+    const webpackTask = require('./tasks/webpack.js')(config);
 
     const reloadBrowserSync = cb => {
         browserSync.reload();
@@ -90,8 +94,8 @@ module.exports = projectConfig => {
 
     const watchTask = cb => {
         watch(config.paths.src.fonts, fontsTask);
-        watch(config.paths.src.images, imageTasks.dev);
-        watch(config.paths.src.js, series(webpackTasks.dev, reloadBrowserSync));
+        watch(config.paths.src.images, imagesTask);
+        watch(config.paths.src.js, series(webpackTask, reloadBrowserSync));
         // Sass watcher is paused during CSScomb and Sass to avoid infinite loop
         const sassWatcher = watch(config.paths.src.sass, series(
             cb => {
@@ -99,7 +103,7 @@ module.exports = projectConfig => {
                 cb();
             },
             cssCombTask,
-            sassTasks.dev,
+            sassTask,
             cb => {
                 sassWatcher.add(config.paths.src.sass);
                 cb();
@@ -112,29 +116,16 @@ module.exports = projectConfig => {
         browserSync.init(config.options.browsersync);
     }
 
-    const devBuildTask = series(
+    const buildTask = series(
         cleanTask,
         parallel(
             fontsTask,
-            imageTasks.dev,
+            imagesTask,
             series(
                 cssCombTask,
-                sassTasks.dev
+                sassTask
             ),
-            webpackTasks.dev
-        )
-    );
-
-    const prodBuildTask = series(
-        cleanTask,
-        parallel(
-            fontsTask,
-            imageTasks.prod,
-            series(
-                cssCombTask,
-                sassTasks.prod
-            ),
-            webpackTasks.prod
+            webpackTask
         )
     );
 
@@ -142,13 +133,12 @@ module.exports = projectConfig => {
         clean: cleanTask,
         csscomb: cssCombTask,
         fonts: fontsTask,
-        images: imageTasks.dev,
-        sass: sassTasks.dev,
-        webpack: webpackTasks.dev,
+        images: imagesTask,
+        sass: sassTask,
+        webpack: webpackTask,
         watch: watchTask,
         serve: serveTask,
-        dev: devBuildTask,
-        build: prodBuildTask,
-        default: parallel(devBuildTask, serveTask, watchTask),
+        build: buildTask,
+        default: series(buildTask, parallel(serveTask, watchTask))
     }
 };

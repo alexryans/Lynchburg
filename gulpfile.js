@@ -59,7 +59,7 @@ function prettyLog(json) {
     console.log(JSON.stringify(json, null, 4));
 }
 
-module.exports = projectConfig => {
+function lynchburg(projectConfig) {
     const config = _merge({}, defaultConfig, projectConfig);
 
     config.isProduction = !!yargs.argv.production;
@@ -153,3 +153,5 @@ module.exports = projectConfig => {
         default: series(timer(buildTask), parallel(serveTask, watchTask))
     }
 };
+
+module.exports = lynchburg;

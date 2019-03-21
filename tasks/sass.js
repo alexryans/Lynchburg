@@ -9,34 +9,25 @@ const sass = require('gulp-sass');
 const sourcemaps = require('gulp-sourcemaps');
 const rucksack = require('rucksack-css');
 
-const timer = require('../lib/timer.js');
-
 sass.compiler = require('sass');
 
 function sassDev(config) {
-    return () => {
-        const start = timer.start('sass');
-
-        return src(config.paths.src.sass)
-            .pipe(sourcemaps.init())
-            .pipe(
-                sass({
-                    fiber: Fiber,
-                    ...config.options.sass
-                })
-                .on('error', notify.onError(error => error.message))
-            )
-            .pipe(postcss([
-                autoprefixer(config.options.autoprefixer),
-                rucksack(config.options.rucksack),
-            ]))
-            .pipe(sourcemaps.write())
-            .pipe(dest(config.paths.dist.css))
-            .pipe(browserSync.stream())
-            .on('end', () => {
-                timer.finish('sass', start);
-            });
-    }
+    return () => src(config.paths.src.sass)
+        .pipe(sourcemaps.init())
+        .pipe(
+            sass({
+                fiber: Fiber,
+                ...config.options.sass
+            })
+            .on('error', notify.onError(error => error.message))
+        )
+        .pipe(postcss([
+            autoprefixer(config.options.autoprefixer),
+            rucksack(config.options.rucksack),
+        ]))
+        .pipe(sourcemaps.write())
+        .pipe(dest(config.paths.dist.css))
+        .pipe(browserSync.stream());
 }
 
 function sassProd(config) {

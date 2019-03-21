@@ -4,6 +4,7 @@ const { series, parallel, watch } = require('gulp');
 const path = require('path');
 const yargs = require('yargs');
 
+const timer = require('./lib/timer.js');
 
 const defaultConfig = {
     src: {
@@ -87,23 +88,31 @@ module.exports = projectConfig => {
     const sassTask = require('./tasks/sass.js')(config);
     const webpackTask = require('./tasks/webpack.js')(config);
 
+    cleanTask.displayName = 'clean';
+    cssCombTask.displayName = 'csscomb';
+    fontsTask.displayName = 'fonts';
+    imagesTask.displayName = 'images';
+    sassTask.displayName = 'sass';
+    webpackTask.displayName = 'webpack';
+
     const reloadBrowserSync = cb => {
         browserSync.reload();
         cb();
     };
 
     const watchTask = cb => {
-        watch(config.paths.src.fonts, fontsTask);
-        watch(config.paths.src.images, imagesTask);
-        watch(config.paths.src.js, series(webpackTask, reloadBrowserSync));
+        // Watchers are passed timed tasks to show output when watched task fires
+        watch(config.paths.src.fonts, timer(fontsTask));
+        watch(config.paths.src.images, timer(imagesTask));
+        watch(config.paths.src.js, series(timer(webpackTask), reloadBrowserSync));
         // Sass watcher is paused during CSScomb and Sass to avoid infinite loop
         const sassWatcher = watch(config.paths.src.sass, series(
             cb => {
                 sassWatcher.unwatch(config.paths.src.sass);
                 cb();
             },
-            cssCombTask,
-            sassTask,
+            timer(cssCombTask),
+            timer(sassTask),
             cb => {
                 sassWatcher.add(config.paths.src.sass);
                 cb();
@@ -116,18 +125,20 @@ module.exports = projectConfig => {
         browserSync.init(config.options.browsersync);
     }
 
+    // Gulp doesn't show output for tasks in series/parallel when exported via Lynchburg, so force output with timer
     const buildTask = series(
-        cleanTask,
+        timer(cleanTask),
         parallel(
-            fontsTask,
-            imagesTask,
+            timer(fontsTask),
+            timer(imagesTask),
             series(
-                cssCombTask,
-                sassTask
+                timer(cssCombTask),
+                timer(sassTask)
             ),
-            webpackTask
+            timer(webpackTask)
         )
     );
+    buildTask.displayName = 'build';
 
     return {
         clean: cleanTask,
@@ -139,6 +150,6 @@ module.exports = projectConfig => {
         watch: watchTask,
         serve: serveTask,
         build: buildTask,
-        default: series(buildTask, parallel(serveTask, watchTask))
+        default: series(timer(buildTask), parallel(serveTask, watchTask))
     }
 };

@@ -4,8 +4,6 @@ const notifier = require('node-notifier');
 const path = require('path');
 const webpack = require('webpack');
 
-const timer = require('../lib/timer.js');
-
 function defaultWebpackConfig(config) {
     const webpackConfig = {
         entry: {},
@@ -77,16 +75,11 @@ function webpackDev(config) {
         devtool: 'cheap-eval-source-map'
     };
 
-    return cb => {
-        const start = timer.start('webpack');
+    return cb => webpack(webpackConfig, (err, stats) => {
+        errorHandler(err, stats);
 
-        return webpack(webpackConfig, (err, stats) => {
-            errorHandler(err, stats);
-            timer.finish('webpack', start);
-
-            cb();
-        });
-    }
+        cb();
+    });
 }
 
 function webpackProd(config) {

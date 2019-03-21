@@ -1,5 +1,6 @@
-const Comb = require('csscomb');
 const globParent = require('glob-parent');
+const { src, dest } = require('gulp');
+const csscomb = require('gulp-csscomb');
 
 const timer = require('../lib/timer.js');
 
@@ -12,14 +13,15 @@ function cssComb(config) {
         }
     }
 
-    const comb = new Comb(require(config.options.csscomb));
-
     return () => {
         const start = timer.start('csscomb');
 
-        return comb.processPath(globParent(config.paths.src.sass)).then(() => {
-            timer.finish('csscomb', start);
-        });
+        return src(config.paths.src.sass)
+            .pipe(csscomb(config.options.csscomb))
+            .pipe(dest(globParent(config.paths.src.sass)))
+            .on('end', () => {
+                timer.finish('csscomb', start);
+            });
     }
 }
 

@@ -92,7 +92,19 @@ module.exports = projectConfig => {
         watch(config.paths.src.fonts, fontsTask);
         watch(config.paths.src.images, imageTasks.dev);
         watch(config.paths.src.js, series(webpackTasks.dev, reloadBrowserSync));
-        watch(config.paths.src.sass, series(cssCombTask, sassTasks.dev));
+        // Sass watcher is paused during CSScomb and Sass to avoid infinite loop
+        const sassWatcher = watch(config.paths.src.sass, series(
+            cb => {
+                sassWatcher.unwatch(config.paths.src.sass);
+                cb();
+            },
+            cssCombTask,
+            sassTasks.dev,
+            cb => {
+                sassWatcher.add(config.paths.src.sass);
+                cb();
+            }
+        ));
         watch(config.src.views, reloadBrowserSync);
     }
 

@@ -12,4 +12,4 @@ function imagesProd(config) {
         .pipe(dest(config.paths.dist.images));
 }
 
-module.exports = config => config.isProduction ? imagesProd(config) : imagesDev(config);
+module.exports = config => config.flags.production ? imagesProd(config) : imagesDev(config);

@@ -47,4 +47,4 @@ function sassProd(config) {
         .pipe(dest(config.paths.dist.css));
 }
 
-module.exports = config => config.isProduction ? sassProd(config) : sassDev(config);
+module.exports = config => config.flags.production ? sassProd(config) : sassDev(config);

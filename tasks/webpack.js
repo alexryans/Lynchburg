@@ -1,15 +1,18 @@
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 const glob = require('glob');
 const globParent = require('glob-parent');
+const _merge = require('lodash.merge');
 const notifier = require('node-notifier');
 const path = require('path');
 const webpack = require('webpack');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
-function defaultWebpackConfig(config) {
+function webpackConfig(config) {
     const webpackConfig = {
         entry: {},
         output: {
             path: config.paths.dist.js,
-            filename: '[name].js'
+            filename: '[name].[contenthash].js'
         },
         module: {
             rules: [
@@ -24,7 +27,32 @@ function defaultWebpackConfig(config) {
                     }
                 }
             ]
-        }
+        },
+        optimization: {
+            splitChunks: {
+                chunks: 'all',
+            },
+        },
+        plugins: [
+            new webpack.ProvidePlugin({
+                $: 'jquery',
+                jQuery: 'jquery',
+                'window.jQuery': 'jquery'
+            }),
+            new CleanWebpackPlugin()
+        ]
+    }
+
+    if(config.flags.analyze) {
+        webpackConfig.plugins.push(new BundleAnalyzerPlugin());
+    }
+
+    if(config.flags.production) {
+        webpackConfig.mode = 'production';
+    }
+    else {
+        webpackConfig.mode = 'development';
+        webpackConfig.devtool = 'inline-source-map';
     }
 
     // Make separate entry point for each file in top level src js folder
@@ -33,6 +61,9 @@ function defaultWebpackConfig(config) {
     glob.sync(entryFiles).forEach(filename => {
         webpackConfig.entry[path.parse(filename).name] = `./${filename}`;
     });
+
+    // Merge in project config
+    _merge(webpackConfig, config.options.webpack);
 
     return webpackConfig;
 }
@@ -68,31 +99,13 @@ const errorHandler = (err, stats) => {
     }
 }
 
-function webpackDev(config) {
-    const webpackConfig = {
-        ...defaultWebpackConfig(config),
-        mode: 'development',
-        devtool: 'cheap-eval-source-map'
-    };
+function webpackTask(config) {
+    const webpackConfig = webpackConfig(config);
 
     return cb => webpack(webpackConfig, (err, stats) => {
         errorHandler(err, stats);
-
         cb();
     });
 }
 
-function webpackProd(config) {
-    const webpackConfig = {
-        ...defaultWebpackConfig(config),
-        mode: 'production'
-    };
-
-    return cb => webpack(webpackConfig, (err, stats) => {
-        errorHandler(err, stats);
-
-        cb();
-    });
-}
-
-module.exports = config => config.isProduction ? webpackProd(config) : webpackDev(config);
+module.exports = config => webpackTask(config);

@@ -7,7 +7,7 @@ const path = require('path');
 const webpack = require('webpack');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
-function webpackConfig(config) {
+function buildWebpackConfig(config) {
     const webpackConfig = {
         entry: {},
         output: {
@@ -100,7 +100,7 @@ const errorHandler = (err, stats) => {
 }
 
 function webpackTask(config) {
-    const webpackConfig = webpackConfig(config);
+    const webpackConfig = buildWebpackConfig(config);
 
     return cb => webpack(webpackConfig, (err, stats) => {
         errorHandler(err, stats);

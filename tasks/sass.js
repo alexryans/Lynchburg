@@ -3,6 +3,7 @@ const browserSync = require('browser-sync').get('browserSync');
 const cssnano = require('cssnano');
 const Fiber = require('fibers');
 const { src, dest } = require('gulp');
+const hash = require('gulp-hash');
 const notify = require('gulp-notify');
 const postcss = require('gulp-postcss');
 const sass = require('gulp-sass');
@@ -26,6 +27,7 @@ function sassDev(config) {
             rucksack(config.options.rucksack),
         ]))
         .pipe(sourcemaps.write())
+        .pipe(hash(config.options.hash))
         .pipe(dest(config.paths.dist.css))
         .pipe(browserSync.stream());
 }
@@ -44,6 +46,7 @@ function sassProd(config) {
             rucksack(config.options.rucksack),
             cssnano(config.options.cssnano)
         ]))
+        .pipe(hash(config.options.hash))
         .pipe(dest(config.paths.dist.css));
 }
 

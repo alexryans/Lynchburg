@@ -34,6 +34,10 @@ const defaultConfig = {
         cssnano: {
             preset: 'default'
         },
+        hash: {
+            hashLength: 20,
+            template: '<%= name %>.<%= hash %><%= ext %>'
+        },
         rucksack: {
             responsiveType: true,
             shorthandPosition: false,

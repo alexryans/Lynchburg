@@ -27,7 +27,6 @@ function sassDev(config) {
             rucksack(config.options.rucksack),
         ]))
         .pipe(sourcemaps.write())
-        .pipe(hash(config.options.hash))
         .pipe(dest(config.paths.dist.css))
         .pipe(browserSync.stream());
 }

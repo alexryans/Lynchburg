@@ -129,8 +129,8 @@ function lynchburg(projectConfig) {
                 sassWatcher.unwatch(config.paths.src.sass);
                 cb();
             },
-            timer(tasks.csscomb),
-            timer(tasks.sass),
+            tasks.csscomb,
+            tasks.sass,
             cb => {
                 sassWatcher.add(config.paths.src.sass);
                 cb();
@@ -151,8 +151,8 @@ function lynchburg(projectConfig) {
             timer(tasks.fonts),
             timer(tasks.images),
             series(
-                timer(tasks.csscomb),
-                timer(tasks.sass)
+                tasks.csscomb,
+                tasks.sass
             ),
             timer(tasks.webpack)
         )

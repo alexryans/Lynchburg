@@ -106,7 +106,7 @@ function lynchburg(projectConfig) {
         require('./tasks/webpack.js')(config)
     );
 
-    const reloadBrowserSync = cb => {
+    tasks.reload = cb => {
         browserSync.reload();
         cb();
     };
@@ -120,7 +120,7 @@ function lynchburg(projectConfig) {
         watch(config.paths.src.js, series(
             clean(config.paths.dist.js),
             timer(tasks.webpack),
-            reloadBrowserSync
+            tasks.reload
         ));
 
         // Sass watcher is paused during CSScomb and Sass to avoid infinite loop
@@ -137,7 +137,7 @@ function lynchburg(projectConfig) {
             }
         ));
 
-        watch(config.src.views, reloadBrowserSync);
+        watch(config.src.views, tasks.reload);
     }
 
     tasks.serve = cb => {

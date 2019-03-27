@@ -1,11 +1,11 @@
 const del = require('del');
 
-function clean(config) {
+function clean(path) {
     return () => del([
-        `${config.dist.dir}/**`,
-        `!${config.dist.dir}`, // Don't remove dist folder itself
-        `!${config.dist.dir}/.gitkeep`
+        `${path}/**`,
+        `!${path}`, // Don't remove given folder itself
+        `!${path}/.gitkeep`
     ]);
 }
 
-module.exports = config => clean(config);
+module.exports = path => clean(path);

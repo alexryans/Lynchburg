@@ -91,23 +91,38 @@ function lynchburg(projectConfig) {
 
     const tasks = {};
 
-    tasks.clean = require('./tasks/clean.js')(config);
+    const clean = require('./tasks/clean.js');
+
+    tasks.clean = clean(config.dist.dir);
     tasks.csscomb = require('./tasks/csscomb.js')(config);
     tasks.fonts = require('./tasks/fonts.js')(config);
     tasks.images = require('./tasks/images.js')(config);
-    tasks.sass = require('./tasks/sass.js')(config);
-    tasks.webpack = require('./tasks/webpack.js')(config);
+    tasks.sass = series(
+        clean(config.paths.dist.css),
+        require('./tasks/sass.js')(config)
+    );
+    tasks.webpack = series(
+        clean(config.paths.dist.js),
+        require('./tasks/webpack.js')(config)
+    );
 
     const reloadBrowserSync = cb => {
         browserSync.reload();
         cb();
     };
 
+    // Watchers are passed timed tasks to show output when watched task fires
     tasks.watch = cb => {
-        // Watchers are passed timed tasks to show output when watched task fires
         watch(config.paths.src.fonts, timer(tasks.fonts));
+
         watch(config.paths.src.images, timer(tasks.images));
-        watch(config.paths.src.js, series(timer(tasks.webpack), reloadBrowserSync));
+
+        watch(config.paths.src.js, series(
+            clean(config.paths.dist.js),
+            timer(tasks.webpack),
+            reloadBrowserSync
+        ));
+
         // Sass watcher is paused during CSScomb and Sass to avoid infinite loop
         const sassWatcher = watch(config.paths.src.sass, series(
             cb => {
@@ -121,6 +136,7 @@ function lynchburg(projectConfig) {
                 cb();
             }
         ));
+
         watch(config.src.views, reloadBrowserSync);
     }
 

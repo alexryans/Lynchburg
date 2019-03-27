@@ -1,4 +1,3 @@
-const CleanWebpackPlugin = require('clean-webpack-plugin');
 const glob = require('glob');
 const globParent = require('glob-parent');
 const _merge = require('lodash.merge');
@@ -38,8 +37,7 @@ function buildWebpackConfig(config) {
                 $: 'jquery',
                 jQuery: 'jquery',
                 'window.jQuery': 'jquery'
-            }),
-            new CleanWebpackPlugin()
+            })
         ]
     }
 

@@ -1,6 +1,6 @@
 # Lynchburg
 
-![Lynchburg logo](/lynchburg-hero.jpg)
+![Lynchburg logo](/lynchburg-hero.png)
 
 > "It’s not a framework, it’s a starting point."
 

@@ -99,6 +99,7 @@ function lynchburg(projectConfig) {
     tasks.csscomb = require('./tasks/csscomb.js')(config);
     tasks.fonts = require('./tasks/fonts.js')(config);
     tasks.images = require('./tasks/images.js')(config);
+    tasks.reload = require('./tasks/reload.js')();
     tasks.sass = series(
         tasks.cleancss,
         require('./tasks/sass.js')(config)
@@ -107,11 +108,6 @@ function lynchburg(projectConfig) {
         clean(config.paths.dist.js),
         require('./tasks/webpack.js')(config)
     );
-
-    tasks.reload = cb => {
-        browserSync.reload();
-        cb();
-    };
 
     // Watchers are passed timed tasks to show output when watched task fires
     tasks.watch = cb => {

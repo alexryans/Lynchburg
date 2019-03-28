@@ -16,4 +16,8 @@ function cssComb(config) {
         .pipe(dest(globParent(config.paths.src.sass)));
 }
 
-module.exports = config => cssComb(config);
+module.exports = config => {
+    const cssCombTask = cssComb(config);
+    cssCombTask.displayName = 'csscomb';
+    return cssCombTask;
+}

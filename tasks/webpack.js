@@ -97,13 +97,14 @@ const errorHandler = (err, stats) => {
     }
 }
 
-function webpackTask(config) {
+module.exports = config => {
     const webpackConfig = buildWebpackConfig(config);
 
-    return cb => webpack(webpackConfig, (err, stats) => {
+    const webpackTask = cb => webpack(webpackConfig, (err, stats) => {
         errorHandler(err, stats);
         cb();
     });
-}
 
-module.exports = config => webpackTask(config);
+    webpackTask.displayName = 'webpack';
+    return webpackTask;
+}

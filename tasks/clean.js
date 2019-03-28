@@ -8,4 +8,8 @@ function clean(path) {
     ]);
 }
 
-module.exports = path => clean(path);
+module.exports = path => {
+    const cleanTask = clean(path);
+    cleanTask.displayName = 'clean';
+    return cleanTask;
+}

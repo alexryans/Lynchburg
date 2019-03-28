@@ -96,6 +96,9 @@ function lynchburg(projectConfig) {
     tasks.clean = clean(config.dist.dir);
     tasks.cleancss = clean(config.paths.dist.css);
     tasks.cleancss.displayName = 'cleancss';
+    tasks.cleanjs = tasks.cleanjs;
+    tasks.cleanjs.displayName = 'cleanjs';
+
     tasks.csscomb = require('./tasks/csscomb.js')(config);
     tasks.fonts = require('./tasks/fonts.js')(config);
     tasks.images = require('./tasks/images.js')(config);
@@ -105,7 +108,7 @@ function lynchburg(projectConfig) {
         require('./tasks/sass.js')(config)
     );
     tasks.webpack = series(
-        clean(config.paths.dist.js),
+        tasks.cleanjs,
         require('./tasks/webpack.js')(config)
     );
 
@@ -116,7 +119,7 @@ function lynchburg(projectConfig) {
         watch(config.paths.src.images, tasks.images);
 
         watch(config.paths.src.js, series(
-            clean(config.paths.dist.js),
+            tasks.cleanjs,
             tasks.webpack,
             tasks.reload
         ));

@@ -10,11 +10,11 @@ const timer = require('./lib/timer.js');
 const defaultConfig = {
     src: {
         dir: 'src/',
-        fonts: 'fonts/**/*.{woff,woff2,ttf,otf,svg}',
+        fonts: 'fonts/**/*.{woff,woff2,ttf,otf}',
         images: 'img/**/*.{png,jpg,jpeg,gif,svg,ico,json,xml}',
         js: 'js/**/*.js',
         sass: 'scss/**/*.scss',
-        views: ''
+        views: '**/*.{html,phtml,php,twig}'
     },
     dist: {
         dir: 'dist/',

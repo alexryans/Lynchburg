@@ -12,4 +12,8 @@ function imagesProd(config) {
         .pipe(dest(config.paths.dist.images));
 }
 
-module.exports = config => config.flags.production ? imagesProd(config) : imagesDev(config);
+module.exports = config => {
+    const imagesTask = config.flags.production ? imagesProd(config) : imagesDev(config);
+    imagesTask.displayName = 'images';
+    return imagesTask;
+}

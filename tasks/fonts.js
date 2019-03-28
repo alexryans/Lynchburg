@@ -5,4 +5,8 @@ function fonts(config) {
         .pipe(dest(config.paths.dist.fonts));
 }
 
-module.exports = config => fonts(config);
+module.exports = config => {
+    const fontsTask = fonts(config);
+    fontsTask.displayName = 'fonts';
+    return fontsTask;
+}

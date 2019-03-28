@@ -4,7 +4,7 @@ const { series, parallel, watch } = require('gulp');
 const path = require('path');
 const yargs = require('yargs');
 
-const generateTaskInfo = require('./lib/documentation.js');
+const generateDocumentation = require('./lib/documentation.js');
 const timer = require('./lib/timer.js');
 
 const defaultConfig = {
@@ -161,9 +161,9 @@ function lynchburg(projectConfig) {
 
     tasks.default = series(tasks.build, parallel(tasks.serve, tasks.watch));
 
-    // Generate name and description for each task for `gulp --tasks`
+    // Generate documentation for each task for `gulp --tasks`
     Object.keys(tasks).forEach(taskName => {
-        generateTaskInfo(tasks[taskName], taskName);
+        generateDocumentation(tasks[taskName], taskName);
     });
 
     return tasks;

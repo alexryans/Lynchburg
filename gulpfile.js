@@ -94,11 +94,12 @@ function lynchburg(projectConfig) {
     const clean = require('./tasks/clean.js');
 
     tasks.clean = clean(config.dist.dir);
+    tasks.cleancss = clean(config.paths.dist.css);
     tasks.csscomb = require('./tasks/csscomb.js')(config);
     tasks.fonts = require('./tasks/fonts.js')(config);
     tasks.images = require('./tasks/images.js')(config);
     tasks.sass = series(
-        clean(config.paths.dist.css),
+        tasks.cleancss,
         require('./tasks/sass.js')(config)
     );
     tasks.webpack = series(
@@ -113,13 +114,13 @@ function lynchburg(projectConfig) {
 
     // Watchers are passed timed tasks to show output when watched task fires
     tasks.watch = cb => {
-        watch(config.paths.src.fonts, timer(tasks.fonts));
+        watch(config.paths.src.fonts, tasks.fonts);
 
-        watch(config.paths.src.images, timer(tasks.images));
+        watch(config.paths.src.images, tasks.images);
 
         watch(config.paths.src.js, series(
             clean(config.paths.dist.js),
-            timer(tasks.webpack),
+            tasks.webpack,
             tasks.reload
         ));
 
@@ -146,19 +147,19 @@ function lynchburg(projectConfig) {
 
     // Gulp doesn't show output for tasks in series/parallel when exported via Lynchburg, so force output with timer
     tasks.build = series(
-        timer(tasks.clean),
+        tasks.clean,
         parallel(
-            timer(tasks.fonts),
-            timer(tasks.images),
+            tasks.fonts,
+            tasks.images,
             series(
                 tasks.csscomb,
                 tasks.sass
             ),
-            timer(tasks.webpack)
+            tasks.webpack
         )
     );
 
-    tasks.default = series(timer(tasks.build), parallel(timer(tasks.serve), timer(tasks.watch)));
+    tasks.default = series(tasks.build, parallel(tasks.serve, tasks.watch));
 
     // Generate name and description for each task for `gulp --tasks`
     Object.keys(tasks).forEach(taskName => {

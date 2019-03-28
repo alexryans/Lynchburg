@@ -131,7 +131,7 @@ function lynchburg(projectConfig) {
             },
             tasks.csscomb,
             tasks.sass,
-            cb => {
+            function resumeWatcher(cb) {
                 sassWatcher.add(config.paths.src.sass);
                 cb();
             }
@@ -139,10 +139,12 @@ function lynchburg(projectConfig) {
 
         watch(config.src.views, tasks.reload);
     }
+    tasks.watch.displayName = 'watch';
 
     tasks.serve = cb => {
         browserSync.init(config.options.browsersync);
     }
+    tasks.serve.displayName = 'serve';
 
     // Gulp doesn't show output for tasks in series/parallel when exported via Lynchburg, so force output with timer
     tasks.build = series(

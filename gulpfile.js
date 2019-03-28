@@ -119,7 +119,6 @@ function lynchburg(projectConfig) {
         watch(config.paths.src.images, tasks.images);
 
         watch(config.paths.src.js, series(
-            tasks.cleanjs,
             tasks.webpack,
             tasks.reload
         ));

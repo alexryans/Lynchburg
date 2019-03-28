@@ -95,6 +95,7 @@ function lynchburg(projectConfig) {
 
     tasks.clean = clean(config.dist.dir);
     tasks.cleancss = clean(config.paths.dist.css);
+    tasks.cleancss.displayName = 'cleancss';
     tasks.csscomb = require('./tasks/csscomb.js')(config);
     tasks.fonts = require('./tasks/fonts.js')(config);
     tasks.images = require('./tasks/images.js')(config);

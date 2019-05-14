@@ -5,6 +5,7 @@ const path = require('path');
 const yargs = require('yargs');
 
 const generateDocumentation = require('./lib/documentation.js');
+const { debugLog, jsonLog } = require('./lib/utils.js');
 
 const defaultConfig = {
     src: {
@@ -59,17 +60,15 @@ const defaultConfig = {
     }
 };
 
-function prettyLog(json) {
-    console.log(JSON.stringify(json, null, 4));
-}
-
 function lynchburg(projectConfig) {
     const config = _merge({}, defaultConfig, projectConfig);
 
     // Set different flags based on command line arguments
-    config.flags = {};
-    config.flags.analyze = !!yargs.argv.analyze;
-    config.flags.production = !!yargs.argv.production;
+    config.flags = {
+        analyze: !!yargs.argv.analyze,
+        debug: !!yargs.argv.debug,
+        production: !!yargs.argv.production
+    };
 
     // Build list of resolved paths to pass to tasks
     config.paths = {
@@ -86,7 +85,10 @@ function lynchburg(projectConfig) {
         });
     });
 
-    // prettyLog(config);
+    if(config.flags.debug) {
+        debugLog('Lynchburg config');
+        jsonLog(config);
+    }
 
     const tasks = {};
 

@@ -6,6 +6,8 @@ const path = require('path');
 const webpack = require('webpack');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
+const { debugLog, jsonLog } = require('../lib/utils.js');
+
 function buildWebpackConfig(config) {
     const webpackConfig = {
         entry: {},
@@ -100,10 +102,21 @@ const errorHandler = (err, stats) => {
 module.exports = config => {
     const webpackConfig = buildWebpackConfig(config);
 
-    const webpackTask = cb => webpack(webpackConfig, (err, stats) => {
-        errorHandler(err, stats);
-        cb();
-    });
+    const webpackTask = cb => {
+        if(config.flags.debug) {
+            debugLog('Webpack config');
+            jsonLog(webpackConfig);
+        }
+
+        return webpack(webpackConfig, (err, stats) => {
+            if(config.flags.debug) {
+                console.log(stats.toString({ colors: true }));
+            }
+
+            errorHandler(err, stats);
+            cb();
+        });
+    }
 
     webpackTask.displayName = 'webpack';
     return webpackTask;

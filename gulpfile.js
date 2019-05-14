@@ -5,7 +5,6 @@ const path = require('path');
 const yargs = require('yargs');
 
 const generateDocumentation = require('./lib/documentation.js');
-const timer = require('./lib/timer.js');
 
 const defaultConfig = {
     src: {
@@ -146,7 +145,6 @@ function lynchburg(projectConfig) {
     }
     tasks.serve.displayName = 'serve';
 
-    // Gulp doesn't show output for tasks in series/parallel when exported via Lynchburg, so force output with timer
     tasks.build = series(
         tasks.clean,
         parallel(

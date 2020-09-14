@@ -124,18 +124,11 @@ function lynchburg(projectConfig) {
             tasks.reload
         ));
 
-        // Sass watcher is paused during CSScomb and Sass to avoid infinite loop
-        const sassWatcher = watch(config.paths.src.sass, series(
-            function pauseWatcher(cb) {
-                sassWatcher.unwatch(config.paths.src.sass);
-                cb();
-            },
+
+        // Watch Queue turned off to avoid infinite that could be caused by csscomb when it updates sass files
+        const sassWatcher = watch(config.paths.src.sass, {queue: false}, series(
             tasks.csscomb,
-            tasks.sass,
-            function resumeWatcher(cb) {
-                sassWatcher.add(config.paths.src.sass);
-                cb();
-            }
+            tasks.sass
         ));
 
         watch(config.src.views, tasks.reload);

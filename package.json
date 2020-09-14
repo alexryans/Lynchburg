@@ -38,7 +38,7 @@
     "fibers": "^3.1.1",
     "glob-parent": "^3.1.0",
     "gulp": "^4.0.0",
-    "gulp-csscomb": "https://github.com/jointrine/gulp-csscomb",
+    "gulp-csscomb": "https://github.com/koistya/gulp-csscomb",
     "gulp-hash": "^4.2.2",
     "gulp-imagemin": "^5.0.3",
     "gulp-notify": "^3.2.0",
